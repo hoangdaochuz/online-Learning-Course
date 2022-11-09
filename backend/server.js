@@ -9,7 +9,8 @@ connectDB();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/api/goals", require("./routes/goalRoutes"));
+app.use("/api/courses", require("./routes/courseRouters"));
+app.use("/api/users", require("./routes/userRouters"));
 app.use(errorHandler);
 app.listen(port, () => {
   console.log(`listening on port ${port}`);

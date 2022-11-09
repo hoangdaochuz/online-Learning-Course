@@ -1,10 +1,10 @@
 const asyncHandler = require("express-async-handler");
 const Course = require("../models/courseModel");
-const getGoals = asyncHandler(async (req, res) => {
+const getCourses = asyncHandler(async (req, res) => {
   const course = await Course.find();
   res.status(200).json(course);
 });
-const setGoals = asyncHandler(async (req, res) => {
+const setCourses = asyncHandler(async (req, res) => {
   if (!req.body.name) {
     res.status(400);
     throw new Error("Please enter a  text field");
@@ -17,7 +17,7 @@ const setGoals = asyncHandler(async (req, res) => {
 
   res.status(200).json(course);
 });
-const updateGoals = asyncHandler(async (req, res) => {
+const updateCourses = asyncHandler(async (req, res) => {
   const course = await Course.findById(req.params.id);
   if (!course) {
     res.status(400);
@@ -28,7 +28,7 @@ const updateGoals = asyncHandler(async (req, res) => {
   });
   res.status(200).json(updateCourse);
 });
-const deleteGoals = asyncHandler(async (req, res) => {
+const deleteCourses = asyncHandler(async (req, res) => {
   const course = await Course.findById(req.params.id)
   if(!course){
     res.status(400)
@@ -40,8 +40,8 @@ const deleteGoals = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getGoals,
-  setGoals,
-  updateGoals,
-  deleteGoals,
+  setCourses,
+  getCourses,
+  updateCourses,
+  deleteCourses,
 };
