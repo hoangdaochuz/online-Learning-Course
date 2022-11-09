@@ -1,24 +1,59 @@
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
-const getUser = asyncHandler(async (req, res) => {
+//@desc  Get list users
+//@route GET /api/users/list
+//@access Public
+const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find();
   res.status(200).json(users);
 });
 
-const setUser = asyncHandler(async (req, res) => {
-  if (!req.body.fullname || !req.body.username || !req.body.password) {
+//@desc  Register users
+//@route POST /api/users/
+//@access Public
+
+const registerUser = asyncHandler(async (req, res) => {
+  const { fullname, username, password } = req.body;
+  if (!fullname || !username || !password) {
     res.status(400);
-    throw Error("Please enter full field");
+    throw Error("Please enter full fields");
   }
 
+  // Check exist
+  const exitUser = await User.findOne({ username });
+  if (exitUser) {
+    res.status(400);
+    throw Error("username is existing in system");
+  }
+
+  // Hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
   const user = await User.create({
-    fullname: req.body.fullname,
-    username: req.body.username,
-    password: req.body.password,
+    fullname,
+    username,
+    password: hashedPassword,
   });
 
-  res.status(200).json(user);
+  if (user) {
+    res.status(200).json({
+      _id: user.id,
+      fullname: user.fullname,
+      username: user.username,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw Error("Invalid user data");
+  }
 });
+
+//@desc  Update user
+//@route PUT /api/users/id
+//@access Public
 
 const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
@@ -32,19 +67,66 @@ const updateUser = asyncHandler(async (req, res) => {
   res.status(200).json(updateUser);
 });
 
-const deleteUser = asyncHandler(async(req, res)=>{
-    const user = await User.findById(req.params.id);
-    if(!user){
-        res.status(400)
-        throw Error("User not found");
-    }
-    await user.remove();
-    res.status(200).json({id: req.params.id});
-})
+//@desc  Delete user
+//@route DELETE /api/users/id
+//@access Public
+
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    res.status(400);
+    throw Error("User not found");
+  }
+  await user.remove();
+  res.status(200).json({ id: req.params.id });
+});
+
+//@desc  Login user
+//@route POST /api/users/login
+//@access Public
+
+const loginUser = asyncHandler(async (req, res) => {
+  const {username, password} = req.body
+  // Check username exit in system
+  const user = await User.findOne({username})
+  if(user && (await bcrypt.compare(password, user.password))){
+    res.status(200).json({
+      _id: user.id,
+      fullname: user.fullname,
+      username: user.username,
+      token: generateToken(user._id),
+    })
+  }else{
+
+    res.status(400).json({ message: "Login failed" });
+  }
+});
+
+//@desc  Get in4 of myself
+//@route GET /api/users/me
+//@access Public
+
+const getMe = asyncHandler(async (req, res) => {
+  const {_id, fullname,username} = await User.findById(req.user.id)
+
+  res.status(200).json({
+    id: _id,
+    fullname,
+    username,
+  });
+});
+
+const generateToken = (id) =>{
+  return jwt.sign({id}, process.env.JWT_SECRET,{
+    expiresIn: '30d',
+  })
+}
 
 module.exports = {
-  getUser,
-  setUser,
+  getUsers,
+  registerUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  loginUser,
+  getMe,
 };
