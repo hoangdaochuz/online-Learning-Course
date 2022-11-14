@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+
 import './App.css';
 import { GlobalStyles } from './GlobalStyles';
 import Header from './components/header/Header';
@@ -9,9 +9,7 @@ import About from './components/pages/About';
 import Team from './components/pages/Team';
 import Journal from './components/pages/Journal';
 import Contact from './components/pages/Contact';
-import Button from './components/common/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+
 import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 import Hero from './components/hero/Hero';
