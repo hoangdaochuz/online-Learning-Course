@@ -15,8 +15,8 @@ const getUsers = asyncHandler(async (req, res) => {
 //@access Public
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { fullname, username, password } = req.body;
-  if (!fullname || !username || !password) {
+  const { fullname, username, password, email, job } = req.body;
+  if (!fullname || !username || !password || !email||!job) {
     res.status(400);
     throw Error("Please enter full fields");
   }
@@ -36,6 +36,8 @@ const registerUser = asyncHandler(async (req, res) => {
     fullname,
     username,
     password: hashedPassword,
+    email,
+    job,
   });
 
   if (user) {
@@ -43,6 +45,8 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user.id,
       fullname: user.fullname,
       username: user.username,
+      email: user.email,
+      job: user.job,
       token: generateToken(user._id),
     });
   } else {
@@ -107,12 +111,14 @@ const loginUser = asyncHandler(async (req, res) => {
 //@access Public
 
 const getMe = asyncHandler(async (req, res) => {
-  const {_id, fullname,username} = await User.findById(req.user.id)
+  const {_id, fullname,username, email, job} = await User.findById(req.user.id)
 
   res.status(200).json({
     id: _id,
     fullname,
     username,
+    email,
+    job,
   });
 });
 

@@ -14,6 +14,15 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Please enter a password"],
     },
+    email:{
+      type: String,
+      required: [true, "Please enter a email"],
+      unique: true,
+    },
+    job:{
+      type: String,
+      required: [true, "Please enter a job"],
+    }
   },
   {
     timestamps: true,

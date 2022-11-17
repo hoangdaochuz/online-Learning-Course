@@ -4,7 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { NavLink, useMatch, useResolvedPath } from 'react-router-dom';
 import styled from 'styled-components'
-
+import {useSelector, useDispatch} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
+import {logout, reset} from '../../features/auth/authSlice'
 const StyledSideBar = styled.div`
     transform: translateX(-100%);
     transition: all 0.5s linear;
@@ -35,7 +37,16 @@ const CustomLink = ({ to, children, ...props }) => {
     );
   };
 
+
 const SideBar = ({onClick}) => {
+    const {user} = useSelector((state) => state.auth)
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
+    const onLogout = ()=>{
+      dispatch(logout())
+      dispatch(reset())
+      navigate('/')
+    }
     return (
         <StyledSideBar className="sidebar-wrapper bg-[#1eb2a6] fixed z-[1] top-0 bottom-0 left-0 w-[150px] ">
           <div onClick={onClick}>
@@ -49,8 +60,16 @@ const SideBar = ({onClick}) => {
               <CustomLink to="/contact">Contact</CustomLink>
               <CustomLink to="/journal">Journal</CustomLink>
               <CustomLink to="/team">Team</CustomLink>
-              <CustomLink to="/login">Sign in</CustomLink>
-              <CustomLink to="/signup">Sign up</CustomLink>
+              {user?(
+                <CustomLink onClick={onLogout} >Log out</CustomLink>
+              ):(
+                <>
+                <CustomLink to="/login">Sign in</CustomLink>
+                <CustomLink to="/signup">Sign up</CustomLink>
+                </>
+              )}
+
+              
             </ul>
           </div>
         </StyledSideBar>

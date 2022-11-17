@@ -150,9 +150,9 @@ const SignUpForm = ({margin}) => {
           // lastName: values.lastName,
           fullname: values.firstName + ' ' + values.lastName,
           username: values.userName,
-          // email: values.email,
+          email: values.email,
           password: values.password,
-          // job: values.job,
+          job: values.job,
         }
         console.log(userData)
         dispatch(register(userData))
