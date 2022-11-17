@@ -3,6 +3,12 @@ import React from "react";
 import * as Yup from "yup";
 import styled from 'styled-components'
 
+import {useEffect} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import {toast} from 'react-toastify'
+import {useNavigate} from 'react-router-dom'
+import {login, reset} from '../../features/auth/authSlice'
+
 const HeadingtAuth = styled.h1`
     color: var(--primary-color);
 `
@@ -32,55 +38,47 @@ const MyInput = ({ label, ...props }) => {
 };
 
 const SignInForm = ({margin}) => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
+  useEffect(()=>{
+    if(isError) {
+      toast.error(message)
+    }
+
+    if(isSuccess || user){
+      navigate('/')
+      dispatch(reset())
+    }
+  },[user,isLoading,isError,isSuccess,message, navigate, dispatch])
+
   return (
     <Formik
       initialValues={{
-        firstName: "",
-        lastName: "",
         userName: "",
-        email: "",
         password: "",
-        confirmPassword: "",
-        job: "",
-        term: false,
       }}
       validationSchema={Yup.object({
-        firstName: Yup.string().required("Required"),
-        lastName: Yup.string().required("Required"),
         userName: Yup.string().required("Required"),
-        email: Yup.string().required("Required"),
         password: Yup.string().required("Required"),
-        confirmPassword: Yup.string()
-          .required("Required")
-          .when("password", {
-            is: (val) => (val && val.length > 0 ? true : false),
-            then: Yup.string().oneOf(
-              [Yup.ref("password")],
-              "Both password need to be same"
-            ),
-          }),
-        job: Yup.string().required("Required"),
-        term: Yup.boolean().oneOf(
-          [true],
-          "Please accept all the term and condition"
-        ),
       })}
       onSubmit={(values, action) => {
-        setTimeout(() => {
-          action.resetForm({
-            firstName: "",
-            lastName: "",
-            userName: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-            job: "",
-            term: false,
-          });
-          action.setSubmitting(false);
-          console.log(values);
+        // setTimeout(() => {
+        //   action.resetForm({
+        //     userName: "",
+        //     password: "",
+        //   });
+        //   action.setSubmitting(false);
+        //   console.log(values);
           
-        }, 5000);
+        // }, 5000);
+        console.log(1)
+        const userData = {
+          username: values.userName,
+          password: values.password,
+        }
+        dispatch(login(userData));
 
       }}
     >

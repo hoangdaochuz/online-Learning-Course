@@ -14,6 +14,8 @@ import SignIn from './components/pages/SignIn';
 import SignUp from './components/pages/SignUp';
 import Hero from './components/hero/Hero';
 
+import {ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   
@@ -31,10 +33,11 @@ function App() {
           <Route path='/team' element={<Team/>}></Route>
           <Route path='/journal' element={<Journal/>}></Route>
           <Route path='/contact' element={<Contact/>}></Route>
-          <Route path='/signin' element={<SignIn/>}></Route>
+          <Route path='/login' element={<SignIn/>}></Route>
           <Route path='/signup' element={<SignUp/>}></Route>
         </Routes>
       </div>
+      <ToastContainer/>
     </div>
   );
 }

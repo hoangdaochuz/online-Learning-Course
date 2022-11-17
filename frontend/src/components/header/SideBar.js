@@ -49,7 +49,7 @@ const SideBar = ({onClick}) => {
               <CustomLink to="/contact">Contact</CustomLink>
               <CustomLink to="/journal">Journal</CustomLink>
               <CustomLink to="/team">Team</CustomLink>
-              <CustomLink to="/signin">Sign in</CustomLink>
+              <CustomLink to="/login">Sign in</CustomLink>
               <CustomLink to="/signup">Sign up</CustomLink>
             </ul>
           </div>

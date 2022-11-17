@@ -5,6 +5,10 @@ import { NavLink, useMatch, useResolvedPath } from "react-router-dom";
 
 import styled from "styled-components";
 import Button from "../common/Button";
+import { useSelector, useDispatch } from "react-redux";
+import { logout, reset } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+
 const StyledNavbarWrapper = styled.div`
   display: flex;
   background-color: #fafafa1f;
@@ -127,6 +131,17 @@ const CustomLink = ({ to, children, ...props }) => {
 };
 
 const NavBar = ({ onClick }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+
+  const onLogout = ()=>{
+    console.log(1)
+    dispatch(logout())
+    dispatch(reset())
+    navigate('/')
+  }
+
   return (
     <StyledNavbarWrapper className="navbar-wrapper flex justify-between items-center">
       <div className="navbar-menu">
@@ -153,14 +168,28 @@ const NavBar = ({ onClick }) => {
             type="text"
             placeholder="Enter course what you want..."
           />
-          <FontAwesomeIcon className="search-icon cursor-pointer text-white pr-2" icon={faSearch} />
+          <FontAwesomeIcon
+            className="search-icon cursor-pointer text-white pr-2"
+            icon={faSearch}
+          />
         </div>
-        <Button to="/signin" className="control-btn" primary={true}>
-          SIGN IN
-        </Button>
-        <Button to="/signup" className="control-btn" outline={true}>
-          SIGN UP
-        </Button>
+
+        {user ? (
+
+          // Sau sẽ làm chỗ này thành 1 cái avatar. Khi hover vào nó sẽ hiển thị ra 1 cái box và có tùy chọn log out
+          <Button className="control-btn" primary={true} onClick={onLogout}>
+            LOG OUT
+          </Button>
+        ) : (
+          <>
+            <Button to="/login" className="control-btn" primary={true}>
+              SIGN IN
+            </Button>
+            <Button to="/signup" className="control-btn" outline={true}>
+              SIGN UP
+            </Button>
+          </>
+        )}
       </div>
     </StyledNavbarWrapper>
   );

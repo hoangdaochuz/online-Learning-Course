@@ -1,6 +1,13 @@
 import {Form, Formik, useField } from "formik";
 import React from "react";
 import * as Yup from "yup";
+import {useEffect} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify'
+import {register, reset} from '../../features/auth/authSlice'
+
+
 import styled from 'styled-components'
 
 const HeadingtAuth = styled.h1`
@@ -71,6 +78,23 @@ const MyCheckBox = ({ children, ...props }) => {
 };
 
 const SignUpForm = ({margin}) => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const {user, isLoading, isError, isSuccess,message} = useSelector((state)=>state.auth)
+  useEffect(()=>{
+      if(isError) {
+         toast.error(message);
+      }
+
+      if(isSuccess|| user){
+        // Nếu đăng ký thành công thì chuyển đến trang chủ
+        //toast.error(message);  tin nhan thanh cong
+        navigate('/')
+      }
+      dispatch(reset())
+  },[user, isError, isSuccess, message, navigate, dispatch])
   return (
     <Formik
       initialValues={{
@@ -105,21 +129,33 @@ const SignUpForm = ({margin}) => {
         ),
       })}
       onSubmit={(values, action) => {
-        setTimeout(() => {
-          action.resetForm({
-            firstName: "",
-            lastName: "",
-            userName: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-            job: "",
-            term: false,
-          });
-          action.setSubmitting(false);
-          console.log(values);
+        // setTimeout(() => {
+        //   action.resetForm({
+        //     firstName: "",
+        //     lastName: "",
+        //     userName: "",
+        //     email: "",
+        //     password: "",
+        //     confirmPassword: "",
+        //     job: "",
+        //     term: false,
+        //   });
+        //   action.setSubmitting(false);
+        //   console.log(values);
           
-        }, 5000);
+        // }, 5000);
+        
+        const userData = {
+          // firstName: values.firstName,
+          // lastName: values.lastName,
+          fullname: values.firstName + ' ' + values.lastName,
+          username: values.userName,
+          // email: values.email,
+          password: values.password,
+          // job: values.job,
+        }
+        console.log(userData)
+        dispatch(register(userData))
 
       }}
     >
