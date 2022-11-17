@@ -16,6 +16,7 @@ import Hero from './components/hero/Hero';
 
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Layout from './components/layout/Layout';
 
 function App() {
   
@@ -23,18 +24,21 @@ function App() {
     
     <div>
       <GlobalStyles/>
-      <Header/>
-      <Hero/>
+      {/* <Header/>
+      <Hero/> */}
       <div className="wrapper">
         <Routes>
-          <Route path='/' element={<Home/>}></Route>
-          <Route path='/courses' element={<Course/>}></Route>
-          <Route path='/about' element={<About/>}></Route>
-          <Route path='/team' element={<Team/>}></Route>
-          <Route path='/journal' element={<Journal/>}></Route>
-          <Route path='/contact' element={<Contact/>}></Route>
-          <Route path='/login' element={<SignIn/>}></Route>
-          <Route path='/signup' element={<SignUp/>}></Route>
+          <Route element={<Layout hideheaderPaths={['/login', '/signup']}/>}>
+            <Route path='/' element={<Home/>}></Route>
+            <Route path='/courses' element={<Course/>}></Route>
+            <Route path='/about' element={<About/>}></Route>
+            <Route path='/team' element={<Team/>}></Route>
+            <Route path='/journal' element={<Journal/>}></Route>
+            <Route path='/contact' element={<Contact/>}></Route>
+            <Route path='/login' element={<SignIn/>}></Route>
+            <Route path='/signup' element={<SignUp/>}></Route>
+          </Route>
+          
         </Routes>
       </div>
       <ToastContainer/>
