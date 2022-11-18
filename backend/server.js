@@ -3,7 +3,7 @@ const colors = require("colors");
 const { errorHandler } = require("./middleware/errorMiddleware");
 const dotenv = require("dotenv").config();
 const connectDB = require("./config/db");
-const formidableMiddleware = require('express-formidable')
+// const formidableMiddleware = require('express-formidable')
 
 const port = process.env.PORT || 5000;
 

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import styled from 'styled-components'
-import Button from '../../common/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 const URL_TEAM_API = 'http://localhost:5000/api/team/'
