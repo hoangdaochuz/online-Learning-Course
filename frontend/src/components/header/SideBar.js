@@ -60,6 +60,7 @@ const SideBar = ({onClick}) => {
               <CustomLink to="/contact">Contact</CustomLink>
               <CustomLink to="/journal">Journal</CustomLink>
               <CustomLink to="/team">Team</CustomLink>
+              <CustomLink to="/teachers">Teachers</CustomLink>
               {user?(
                 <CustomLink onClick={onLogout} >Log out</CustomLink>
               ):(
