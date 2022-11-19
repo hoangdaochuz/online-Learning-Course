@@ -62,7 +62,12 @@ const SideBar = ({onClick}) => {
               <CustomLink to="/team">Team</CustomLink>
               <CustomLink to="/teachers">Teachers</CustomLink>
               {user?(
+                <>
+
+                <CustomLink to='/me'>Quản lý tài khoản</CustomLink>
+                <CustomLink  >Quản lý học tập</CustomLink>
                 <CustomLink onClick={onLogout} >Log out</CustomLink>
+                </>
               ):(
                 <>
                 <CustomLink to="/login">Sign in</CustomLink>

@@ -1,4 +1,4 @@
-import { faBars, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket, faBars, faGraduationCap, faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { NavLink, useMatch, useResolvedPath } from "react-router-dom";
@@ -62,6 +62,27 @@ const StyledNavbarWrapper = styled.div`
     height: 20px;
   }
 
+  .menu-user{
+    display: none;
+  }
+
+  .avatar-user-box:hover .menu-user{
+    display: block;
+  }
+
+  .menu-user::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    top: -25px;
+    left: 0;
+  }
+
+  .menu-user-link:hover{
+    color: var(--primary-color);
+  }
+
   @media screen and (max-width: 1024px) {
     .navbar-menu-item {
       padding: 10px;
@@ -74,7 +95,7 @@ const StyledNavbarWrapper = styled.div`
     }
   }
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 920px) {
     .btn-wrapper {
       display: none;
     }
@@ -86,7 +107,7 @@ const StyledNavbarWrapper = styled.div`
     }
   }
 
-  @media screen and (max-width: 812px) {
+  @media screen and (max-width: 870px) {
     .navbar-menu {
       display: none;
     }
@@ -114,6 +135,9 @@ const StyledNavbarWrapper = styled.div`
       margin-bottom: 12px;
       align-self: flex-start;
     }
+    .avatar-user-box{
+      display: none;
+    }
   }
 `;
 
@@ -135,12 +159,12 @@ const NavBar = ({ onClick }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
-  const onLogout = ()=>{
-    console.log(1)
-    dispatch(logout())
-    dispatch(reset())
-    navigate('/')
-  }
+  const onLogout = () => {
+    console.log(1);
+    dispatch(logout());
+    dispatch(reset());
+    navigate("/");
+  };
 
   return (
     <StyledNavbarWrapper className="navbar-wrapper flex justify-between items-center">
@@ -176,11 +200,35 @@ const NavBar = ({ onClick }) => {
         </div>
 
         {user ? (
-
           // Sau sẽ làm chỗ này thành 1 cái avatar. Khi hover vào nó sẽ hiển thị ra 1 cái box và có tùy chọn log out
-          <Button className="control-btn" primary={true} onClick={onLogout}>
-            LOG OUT
-          </Button>
+          <div className="relative flex justify-between">
+            <div className="avatar-user-box w-[40px] h-[40px] rounded-full bg-[var(--primary-color)] mr-3">
+              <NavLink className="avatar-user-link">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtP0v8NPq0_gfdDiu-nOn210pFSFsfKn1PnXF5NvMvP-IbENLdjP3Vdc2g9OQVbLdtGYE&usqp=CAU"
+                  alt=""
+                  className="w-full h-full object-cover rounded-full avatar-user-image"
+                />
+              </NavLink>
+              <div className="menu-user bg-white absolute -bottom-full -left-full -translate-x-1/2 translate-y-3/4 rounded-sm shadow-md w-[200px]">
+                <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
+                  <NavLink to="/me" className="text-base menu-user-link">Quản lý tài khoản</NavLink>
+                  <FontAwesomeIcon icon={faUser} ></FontAwesomeIcon>
+                </div>
+                <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
+                  <NavLink className="text-base menu-user-link">Quản lý học tập</NavLink>
+                  <FontAwesomeIcon icon={faGraduationCap} ></FontAwesomeIcon>
+                </div>
+                <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
+                  <NavLink className="text-base menu-user-link" onClick={onLogout} to='/'>LOG OUT</NavLink>
+                  <FontAwesomeIcon icon={faArrowRightFromBracket} ></FontAwesomeIcon>
+                </div>
+              </div>
+            </div>
+            {/* <Button className="control-btn" primary={true} onClick={onLogout}>
+              LOG OUT
+            </Button> */}
+          </div>
         ) : (
           <>
             <Button to="/login" className="control-btn" primary={true}>

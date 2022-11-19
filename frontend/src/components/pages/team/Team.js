@@ -6,6 +6,8 @@ import { faFacebookF, faInstagram, faLinkedin } from '@fortawesome/free-brands-s
 const URL_TEAM_API = 'http://localhost:5000/api/team/'
 
 const StyledTeamWrapper = styled.div`
+    max-width: 1320px;
+    margin: 0 auto;
     @keyframes  comming{
         from{
             transform: translateX(-80%);

@@ -15,6 +15,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/layout/Layout";
 import Teacher from "./components/pages/teacher/Teacher";
+import Me from "./components/pages/me/Me";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="/login" element={<SignIn />}></Route>
             <Route path="/signup" element={<SignUp />}></Route>
             <Route path="/teachers" element={<Teacher />}></Route>
+            <Route path="/me" element={<Me />}></Route>
           </Route>
         </Routes>
       </div>

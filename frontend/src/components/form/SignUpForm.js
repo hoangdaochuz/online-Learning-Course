@@ -128,26 +128,8 @@ const SignUpForm = ({margin}) => {
           "Please accept all the term and condition"
         ),
       })}
-      onSubmit={(values, action) => {
-        // setTimeout(() => {
-        //   action.resetForm({
-        //     firstName: "",
-        //     lastName: "",
-        //     userName: "",
-        //     email: "",
-        //     password: "",
-        //     confirmPassword: "",
-        //     job: "",
-        //     term: false,
-        //   });
-        //   action.setSubmitting(false);
-        //   console.log(values);
-          
-        // }, 5000);
-        
+      onSubmit={(values, action) => {   
         const userData = {
-          // firstName: values.firstName,
-          // lastName: values.lastName,
           fullname: values.firstName + ' ' + values.lastName,
           username: values.userName,
           email: values.email,
@@ -165,7 +147,7 @@ const SignUpForm = ({margin}) => {
             <HeadingtAuth className="text-4xl font-semibold text-purple-500 pb-[20px]">
               Sign Up
             </HeadingtAuth>
-            {formik.isSubmitting ? (
+            {/* {formik.isSubmitting ? (
               <div
                 className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center"
               >
@@ -177,7 +159,7 @@ const SignUpForm = ({margin}) => {
                   This may take a few seconds, please don't close this page.
                 </p>
               </div>
-            ) : null}
+            ) : null} */}
             <MyInput
               name="firstName"
               id="firstName"
@@ -224,6 +206,7 @@ const SignUpForm = ({margin}) => {
               <option value="select your job">Select your job</option>
               <option value="student">Student</option>
               <option value="teacher">Teacher</option>
+              <option value="admin">Admin</option>
             </MySelect>
             <MyCheckBox type="checkbox" name="term" id="term">
               <p>I accept with all terms and conditions</p>
@@ -231,7 +214,7 @@ const SignUpForm = ({margin}) => {
             <ButtonAuth
               type="submit"
               className="bg-purple-400 text-white py-3 px-5 ml-auto rounded-md float-right mt-4"
-              disabled={formik.isSubmitting}
+              // disabled={formik.isSubmitting}
             >
               Sign up
             </ButtonAuth>

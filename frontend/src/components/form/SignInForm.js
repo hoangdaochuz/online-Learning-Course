@@ -64,16 +64,6 @@ const SignInForm = ({margin}) => {
         password: Yup.string().required("Required"),
       })}
       onSubmit={(values, action) => {
-        // setTimeout(() => {
-        //   action.resetForm({
-        //     userName: "",
-        //     password: "",
-        //   });
-        //   action.setSubmitting(false);
-        //   console.log(values);
-          
-        // }, 5000);
-        console.log(1)
         const userData = {
           username: values.userName,
           password: values.password,
@@ -88,7 +78,7 @@ const SignInForm = ({margin}) => {
             <HeadingtAuth className="text-4xl font-semibold text-purple-500 pb-[20px]">
               Sign In
             </HeadingtAuth>
-            {formik.isSubmitting ? (
+            {/* {formik.isSubmitting ? (
               <div
                 className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center"
               >
@@ -100,7 +90,7 @@ const SignInForm = ({margin}) => {
                   This may take a few seconds, please don't close this page.
                 </p>
               </div>
-            ) : null}
+            ) : null} */}
             <MyInput
               name="userName"
               id="userName"
@@ -118,7 +108,7 @@ const SignInForm = ({margin}) => {
             <ButtonAuth
               type="submit"
               className="bg-purple-400 text-white py-3 px-5 ml-auto rounded-md float-right mt-4"
-              disabled={formik.isSubmitting}
+              // disabled={formik.isSubmitting}
             >
               Sign in
             </ButtonAuth>
