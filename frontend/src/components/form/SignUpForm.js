@@ -89,12 +89,15 @@ const SignUpForm = ({margin}) => {
       }
 
       if(isSuccess|| user){
-        // Nếu đăng ký thành công thì chuyển đến trang chủ
-        //toast.error(message);  tin nhan thanh cong
         navigate('/')
       }
       dispatch(reset())
   },[user, isError, isSuccess, message, navigate, dispatch])
+
+  if (isLoading) {
+    return (<div className="w-[50px] h-[50px] rounded-full border-4 border-blue-800 border-l-transparent animate-spin mt-[100px]"></div>)
+  }
+
   return (
     <Formik
       initialValues={{

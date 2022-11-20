@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch} from "react-redux";
+import { reset, logout } from "../../../features/auth/authSlice";
 import axios from "axios";
-
+import {toast} from 'react-toastify'
+import {useNavigate} from 'react-router-dom'
 const API_URL_ME = "http://localhost:5000/api/users/me/";
+const API_URL_USER = "http://localhost:5000/api/users/";
 
 const StyledMeContainer = styled.div`
   max-width: 1320px;
@@ -60,8 +63,8 @@ const StyledMeContainer = styled.div`
   }
 `;
 
-const MyInput = ({ label, loading, ...props }) => {
-  const [field, meta] = useField(props);
+const MyInput = ({ label,change, loading, ...props }) => {
+  const [field, meta, helpers] = useField(props);
   return (
     <div className="flex flex-col relative">
       <label
@@ -72,7 +75,15 @@ const MyInput = ({ label, loading, ...props }) => {
       </label>
       <input
         {...props}
+        
         {...field}
+        onChange = {(e)=>{
+          field.onChange(e);
+          change();
+        }
+
+        }
+
         className="w-1/2 px-3 py-2 rounded-lg mb-3 form-item"
       />
       {loading && (
@@ -82,7 +93,7 @@ const MyInput = ({ label, loading, ...props }) => {
   );
 };
 
-const MySelect = ({ label, loading, ...props }) => {
+const MySelect = ({ label, change, loading, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <div className="flex flex-col relative">
@@ -95,6 +106,10 @@ const MySelect = ({ label, loading, ...props }) => {
       <select
         {...props}
         {...field}
+        onChange = {(e)=>{
+          field.onChange(e)
+          change()
+        }}
         className="w-1/2 bg-slate-300 px-3 py-2 rounded-lg mb-3  form-item"
       ></select>
       {loading && (
@@ -106,32 +121,17 @@ const MySelect = ({ label, loading, ...props }) => {
 
 const Me = () => {
   // const [userInfo, setUserInfo] = useState({});
-  const { user } = useSelector((state) => state.auth);
-  // const [loading, setLoading] = useState(true);
-  // const token = user.token;
-  // const config = {
-  //   headers: { Authorization: `Bearer ${token}` },
-  // };
-
-  // const getInfoUser = async () => {
-  //   setLoading(true);
-  //   const response = await axios.get(API_URL_ME, config);
-  //   // console.log(response.data)
-  //   return response.data;
-  // };
-
-  // useEffect(() => {
-  //   getInfoUser().then((data) => {
-  //     setUserInfo({
-  //       fullname: data.fullname,
-  //       username: data.username,
-  //       email: data.email,
-  //       job: data.job,
-  //     });
-  //     setLoading(false);
-  //   });
-  // }, []);
-  // console.log(userInfo.fullname);
+  const { user} = useSelector((state) => state.auth);
+  const [change, setChange] = useState(false);
+  const handleChange = ()=>{
+    setChange(true);
+  }
+  const handleUpdateInfo = async(userChange)=>{
+    const response = await axios.put(API_URL_USER+user._id, userChange)
+    return response.data;
+  }
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <StyledMeContainer className="container">
       <h1 className="text-center text-[var(--primary-color)] text-[46px] py-10">
@@ -172,7 +172,14 @@ const Me = () => {
                 email: values.email,
                 job: values.job,
               };
-              console.log(userChange);
+              handleUpdateInfo(userChange).then((newUser)=>{
+                console.log(newUser)
+                toast.success("Update successfully. Login again")
+                dispatch(logout())
+                dispatch(reset())
+                navigate('/login')
+              })
+              
             }}
           >
             <Form className="form-wrapper flex flex-col ml-20">
@@ -182,6 +189,7 @@ const Me = () => {
                 name="fullname"
                 id="fullname"
                 type="text"
+                change={()=>handleChange()}
               ></MyInput>
               <MyInput
                 
@@ -189,6 +197,7 @@ const Me = () => {
                 name="username"
                 id="username"
                 type="text"
+                change={()=>handleChange()}
               ></MyInput>
               <MyInput
                 
@@ -196,17 +205,17 @@ const Me = () => {
                 name="email"
                 id="email"
                 type="text"
+                change={()=>handleChange()}
               ></MyInput>
-              <MySelect  label="Job" name="job" id="job">
+              <MySelect  label="Job" name="job" id="job" change={()=>handleChange()}>
                 <option value="student">Student</option>
                 <option value="teacher">Teacher</option>
                 <option value="admin">Admin</option>
               </MySelect>
               <button
-
                 type="submit"
-                className="w-[20%] flex-shrink-0 bg-[var(--primary-color)] text-white px-5 py-2 rounded-xl text-lg mt-10 ml-[30%] disable btn-save-profile"
-                disabled
+                className={`w-[20%] flex-shrink-0 bg-[var(--primary-color)] text-white px-5 py-2 rounded-xl text-lg mt-10 ml-[30%] ${change?'': 'disable'} btn-save-profile`}
+                disabled = {!change}
               >
                 Save
               </button>

@@ -49,9 +49,13 @@ const SignInForm = ({margin}) => {
 
     if(isSuccess || user){
       navigate('/')
-      dispatch(reset())
     }
+    dispatch(reset())
   },[user,isLoading,isError,isSuccess,message, navigate, dispatch])
+
+  if (isLoading) {
+    return (<div className="w-[50px] h-[50px] rounded-full border-4 border-blue-800 border-l-transparent animate-spin mt-[100px]"></div>)
+  }
 
   return (
     <Formik
