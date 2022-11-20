@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
 import { useSelector, useDispatch} from "react-redux";
-import { reset, logout } from "../../../features/auth/authSlice";
+import { reset, logout, update } from "../../../features/auth/authSlice";
 import axios from "axios";
 import {toast} from 'react-toastify'
 import {useNavigate} from 'react-router-dom'
@@ -121,8 +121,9 @@ const MySelect = ({ label, change, loading, ...props }) => {
 
 const Me = () => {
   // const [userInfo, setUserInfo] = useState({});
-  const { user} = useSelector((state) => state.auth);
+  const { user, isLoading, isError, isSuccess,message} = useSelector((state) => state.auth);
   const [change, setChange] = useState(false);
+  const [updated, setUpdated] = useState(false);
   const handleChange = ()=>{
     setChange(true);
   }
@@ -132,6 +133,14 @@ const Me = () => {
   }
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  useEffect(()=>{
+    if(isError) {
+      toast.error(message);
+   }
+   if(isSuccess){
+      toast.success("Update Successfully")
+  }
+  },[user, isError, isSuccess, message, navigate, dispatch])
   return (
     <StyledMeContainer className="container">
       <h1 className="text-center text-[var(--primary-color)] text-[46px] py-10">
@@ -172,13 +181,9 @@ const Me = () => {
                 email: values.email,
                 job: values.job,
               };
-              handleUpdateInfo(userChange).then((newUser)=>{
-                console.log(newUser)
-                toast.success("Update successfully. Login again")
-                dispatch(logout())
-                dispatch(reset())
-                navigate('/login')
-              })
+              dispatch(update({userChange: userChange,id: user._id}))
+              setUpdated(true);
+              setChange(false)
               
             }}
           >
