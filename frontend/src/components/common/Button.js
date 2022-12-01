@@ -36,6 +36,10 @@ const StyledButtonWrapper = styled.div`
         background-color: #f2f2f2;;
         color: var(--primary-color);
     `};
+
+    ${props => props.deleteBtn && css`
+        background-color: #df4141;
+    `}
     
   }
 `;
@@ -53,6 +57,7 @@ const Button = ({
   large = false,
   small = false,
   className,
+  deleteBtn,
   LeftIcon,
   RightIcon,
   ...passProps
@@ -83,6 +88,7 @@ const Button = ({
       rounded={rounded}
       disable={disable}
       btnBgWhite={btnBgWhite}
+      deleteBtn={deleteBtn}
       large={large}
       small={small}
       {...passProps}

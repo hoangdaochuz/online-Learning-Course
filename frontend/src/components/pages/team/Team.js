@@ -165,7 +165,7 @@ const Team = () => {
       </div>
       )}
       <div className="list-member-wrapper grid grid-cols-3 gap-10 px-10 pb-10">
-        {!loading && listMember.map((member) => {
+        {!loading && listMember.length>0 && listMember.map((member) => {
             return <TeamMember key={member._id} data={member}/>
         })}
       </div>

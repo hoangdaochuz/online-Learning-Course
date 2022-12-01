@@ -16,6 +16,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/layout/Layout";
 import Teacher from "./components/pages/teacher/Teacher";
 import Me from "./components/pages/me/Me";
+import Lessons from "./components/pages/lesson/Lessons";
+import ManageTeaching from "./components/pages/ManageTeaching/ManageTeaching";
 
 function App() {
   return (
@@ -36,6 +38,9 @@ function App() {
             <Route path="/signup" element={<SignUp />}></Route>
             <Route path="/teachers" element={<Teacher />}></Route>
             <Route path="/me" element={<Me />}></Route>
+            <Route path="/lessons" element={<Lessons/>}></Route>
+            <Route path="/manage-teaching" element={<ManageTeaching/>}></Route>
+
           </Route>
         </Routes>
       </div>

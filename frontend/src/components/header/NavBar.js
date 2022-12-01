@@ -215,10 +215,24 @@ const NavBar = ({ onClick }) => {
                   <NavLink to="/me" className="text-base menu-user-link">Quản lý tài khoản</NavLink>
                   <FontAwesomeIcon icon={faUser} ></FontAwesomeIcon>
                 </div>
-                <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
+                {user.job==='teacher' && (
+                  <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
+                  <NavLink to='/manage-teaching' className="text-base menu-user-link">Quản lý giảng dạy</NavLink>
+                  <FontAwesomeIcon icon={faGraduationCap} ></FontAwesomeIcon>
+                </div>
+                )}
+                {user.job==='admin' && (
+                  <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
+                  <NavLink className="text-base menu-user-link">Quản lý hệ thông</NavLink>
+                  <FontAwesomeIcon icon={faGraduationCap} ></FontAwesomeIcon>
+                </div>
+                )}
+                {user.job==='student' && (
+                  <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
                   <NavLink className="text-base menu-user-link">Quản lý học tập</NavLink>
                   <FontAwesomeIcon icon={faGraduationCap} ></FontAwesomeIcon>
                 </div>
+                )}
                 <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
                   <NavLink className="text-base menu-user-link" onClick={onLogout} to='/'>LOG OUT</NavLink>
                   <FontAwesomeIcon icon={faArrowRightFromBracket} ></FontAwesomeIcon>

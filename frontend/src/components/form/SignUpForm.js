@@ -90,6 +90,7 @@ const SignUpForm = ({margin}) => {
 
       if(isSuccess|| user){
         navigate('/')
+        toast.success("Sign up successfully")
       }
       dispatch(reset())
   },[user, isError, isSuccess, message, navigate, dispatch])
