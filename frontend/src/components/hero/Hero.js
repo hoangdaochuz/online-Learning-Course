@@ -161,9 +161,9 @@ const Hero = () => {
             <div className="absolute bottom-1/2 left-1/2 -translate-x-1/2">
               <div className="translate-x-1/4">
                 <NavLink to='/' className="text-sm text-[#ffffffcc] font-semibold uppercase text-center back-home-control">Home &gt;</NavLink>
-                <span className="text-sm text-[#ffffffcc] font-semibold uppercase text-center"> {pathname.replace('/','')} &gt;</span>
+                <span className="text-sm text-[#ffffffcc] font-semibold uppercase text-center"> {pathname.includes('mycourse')? 'details' : pathname.replace('/','')} &gt;</span>
               </div>
-              <h1 className="text-center my-auto text-[70px] text-white capitalize">{pathname.replace('/','')}</h1>
+              <h1 className="text-center my-auto text-[70px] text-white capitalize">{pathname.includes('mycourse')? 'details' : pathname.replace('/','')}</h1>
             </div>
         )}
         

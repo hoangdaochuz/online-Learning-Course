@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import Portal from "./Portal";
 const StyledModal = styled.div`
+  
   .wrapper {
     position: fixed;
     inset: 0;

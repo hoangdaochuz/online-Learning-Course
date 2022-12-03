@@ -51,7 +51,13 @@ const courseSchema = mongoose.Schema({
             ref: 'User',
         }
     ],
-    content: [chapterSchema],
+    // content: [chapterSchema],
+
+    content: {
+        type: String,
+        required: [true, 'Please choose video file']
+    },
+
     rating: {
         type: Number,
         required: true,

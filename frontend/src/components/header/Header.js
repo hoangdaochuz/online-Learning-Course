@@ -18,7 +18,8 @@ import SideBar from "./SideBar";
 const StyledHeader = styled.div`
   max-width: 1320px;
   margin: 0 auto;
-  position: fixed;
+  position: absolute;
+  top: 0;
   left: 0;
   right: 0;
   z-index: 1;

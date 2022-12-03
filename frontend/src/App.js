@@ -18,6 +18,7 @@ import Teacher from "./components/pages/teacher/Teacher";
 import Me from "./components/pages/me/Me";
 import Lessons from "./components/pages/lesson/Lessons";
 import ManageTeaching from "./components/pages/ManageTeaching/ManageTeaching";
+import TeacherManageDetailCourse from "./components/pages/ManageTeaching/TeacherManageDetailCourse";
 
 function App() {
   return (
@@ -40,7 +41,7 @@ function App() {
             <Route path="/me" element={<Me />}></Route>
             <Route path="/lessons" element={<Lessons/>}></Route>
             <Route path="/manage-teaching" element={<ManageTeaching/>}></Route>
-
+            <Route path="/manage-teaching/mycourse/:id" element={<TeacherManageDetailCourse />}></Route>
           </Route>
         </Routes>
       </div>
