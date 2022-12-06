@@ -10,6 +10,45 @@ import {useSelector} from 'react-redux'
 import axios from 'axios'
 import { useEffect } from "react";
 
+import styled from 'styled-components'
+
+const ManageTeachingStyle = styled.div`
+  @media screen and (width: 1024px){
+    .manage-teaching-container{
+        max-width: 960px;
+        margin: 0 auto;
+      }
+  }
+
+  @media screen and (max-width: 1023px){
+      .list-course-wrapper{
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .manage-teaching-container{
+        max-width: 700px;
+        margin: 0 auto;
+      }
+  }
+
+  @media screen and (max-width: 767px){
+    .list-course-wrapper{
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .manage-teaching-container{
+        max-width: 500px;
+        margin: 0 auto;
+    }
+  }
+
+  @media screen and (max-width: 500px){
+    .manage-teaching-container{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+  }
+
+`
+
 const ManageTeaching = () => {
   const [isOpenAddModal, setOpenAddModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
@@ -45,8 +84,8 @@ const ManageTeaching = () => {
   },[])
 
   return (
-    <>
-      <div className="max-w-[1320px] ml-auto mr-auto pt-[40px] pb-[40px]">
+    <ManageTeachingStyle>
+      <div className="manage-teaching-container max-w-[1320px] ml-auto mr-auto pt-[40px] pb-[40px]">
         <div className="flex justify-between items-center">
           <h1 className="text-[var(--primary-color)] text-[46px] text-center">
             My courses
@@ -60,11 +99,11 @@ const ManageTeaching = () => {
             </NavLink>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-10 mt-[40px]">
+        <div className="list-course-wrapper grid grid-cols-3 gap-10 mt-[40px]">
           {
-            myCourses.length >0 && myCourses.map((course)=>{
+            myCourses.length >0 && myCourses.map((course, index)=>{
               return (
-                <div className="">
+                <div className="" key={index}>
                   <div className="w-full h-[250px] ">
                     <img
                       className="w-full h-full rounded-lg"
@@ -100,13 +139,13 @@ const ManageTeaching = () => {
 
                       <h3 className="mt-[8px]">{user.username}</h3>
                       <p className="mt-[8px] text-3xl text-[var(--primary-color)]">
-                        ${course.price}
+                        {course.price} VNĐ
                       </p>
                     </div>
                     <div className="flex gap-5 mt-5">
                       <Button primary={true} onClick={openEditModal}>Edit</Button>
                       <Button deleteBtn={true}>Delete</Button>
-                      <Button primary={true} to={`/manage-teaching/mycourse/${course._id}`}>View</Button>
+                      <Button primary={true} to={`/manage-teaching/mycourse/${course.id}`}>View</Button>
                     </div>
                   </div>
               </div>
@@ -130,7 +169,7 @@ const ManageTeaching = () => {
       > 
         <EditCourseForm closeModal={closeEditModal}/>
       </Modal>}
-    </>
+    </ManageTeachingStyle>
   );
 };
 

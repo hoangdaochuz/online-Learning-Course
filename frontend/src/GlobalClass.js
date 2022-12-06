@@ -9,6 +9,7 @@ export const GlobalClass = css`
     }
     body{
         font-family: 'Roboto', sans-serif;
+        overflow-x: hidden;
     }
     .showSideBar{
         transform: translateX(0);
