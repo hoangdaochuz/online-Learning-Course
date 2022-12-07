@@ -22,7 +22,6 @@ const MyInput = ({ label, ...props }) => {
     );
   };
 
-
   const MyInputVideo = ({ label, ...props }) => {
     const [field, meta] = useField(props);
     const [imgfile, uploadimg] = useState([]);
@@ -64,8 +63,7 @@ const MyInput = ({ label, ...props }) => {
       </div>
     );
   };
-
-const AddLessonForm = ({closeModal}) => {
+const EditLessonForm = ({id_lesson,closeModal}) => {
     return (
         <Formik
             initialValues={{
@@ -89,14 +87,13 @@ const AddLessonForm = ({closeModal}) => {
         >
 
             <Form className="pt-[50px]">
-                <h2 className="text-center text-[var(--primary-color)] text-[28px] border-b-2 border-b-[var(--primary-color)] pb-[20px] ">THÊM BÀI HỌC</h2>
+                <h2 className="text-center text-[var(--primary-color)] text-[28px] border-b-2 border-b-[var(--primary-color)] pb-[20px] ">CHỈNH SỬA BÀI HỌC</h2>
                 <div className="pb-[70px] mx-10 h-[200px] overflow-y-auto">
                     {/* Tên bài học */}
                     <MyInput label="Tên bài học" type="text" name="name" id="name" placeholder="Nhập tên bài học..." />
 
-                    <MyInputVideo label="Video" type="file" name="video" id="video" />
-
-                    <button className="float-right  ml-[20px] bg-[var(--primary-color)] text-white text-base px-[20px] py-[5px] rounded-lg" type="submit">THÊM</button>
+                    <MyInputVideo label="Video" type="file" name="video" id="video"/>
+                    <button className="float-right  ml-[20px] bg-[var(--primary-color)] text-white text-base px-[20px] py-[5px] rounded-lg" type="submit">LƯU</button>
                     <button className="float-right border bg-red-600 text-white text-base px-[20px] py-[5px] rounded-lg " onClick={closeModal}>HỦY</button>
                 </div>
             </Form>
@@ -104,4 +101,4 @@ const AddLessonForm = ({closeModal}) => {
     );
 };
 
-export default AddLessonForm;
+export default EditLessonForm;

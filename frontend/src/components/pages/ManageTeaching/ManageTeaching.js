@@ -11,6 +11,8 @@ import axios from 'axios'
 import { useEffect } from "react";
 
 import styled from 'styled-components'
+import DeleteCourseConfirm from "../../common/manage_course_form/DeleteCourseConfirm";
+
 
 const ManageTeachingStyle = styled.div`
   @media screen and (width: 1024px){
@@ -52,7 +54,10 @@ const ManageTeachingStyle = styled.div`
 const ManageTeaching = () => {
   const [isOpenAddModal, setOpenAddModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
+  const [isOpenDeleteModal, setOpenDeleteModal] = useState(false);
   const [myCourses, setMyCourses] = useState([]);
+  const [selectedEditCourse, setSelectedEditCourse] = useState(null);
+  const [selectedDeleteCourse, setSelectedDeleteCourse] = useState(null);
   const openAddModal = () => {
     setOpenAddModal(true);
   };
@@ -61,19 +66,17 @@ const ManageTeaching = () => {
     setOpenAddModal(false);
   };
 
-  
-  const openEditModal = () => {
-    setOpenEditModal(true);
-  };
-
   const closeEditModal = () => {
     setOpenEditModal(false);
   };
+
+  const closeDeleteModal = ()=>{
+    setOpenDeleteModal(false);
+  }
   const {user} = useSelector((state) => state.auth)
   console.log(user._id)
   const getMyCourse = async(id)=>{
     const response = await axios.get(`http://localhost:5000/api/courses/mycourse/${id}`)
-    console.log(response.data)
     return response.data
   }
 
@@ -83,6 +86,16 @@ const ManageTeaching = () => {
     })
   },[])
 
+  const handleEditCourse = (id)=>{
+    setSelectedEditCourse(id)
+    setOpenEditModal(true);
+  }
+
+  const handleDeleteCourse = (id)=>{
+    setSelectedDeleteCourse(id)
+    setOpenDeleteModal(true)
+
+  }
   return (
     <ManageTeachingStyle>
       <div className="manage-teaching-container max-w-[1320px] ml-auto mr-auto pt-[40px] pb-[40px]">
@@ -143,11 +156,26 @@ const ManageTeaching = () => {
                       </p>
                     </div>
                     <div className="flex gap-5 mt-5">
-                      <Button primary={true} onClick={openEditModal}>Edit</Button>
-                      <Button deleteBtn={true}>Delete</Button>
+                      <Button primary={true} onClick={()=>handleEditCourse(course.id)}>Edit</Button>
+                      <Button deleteBtn={true} onClick={()=>handleDeleteCourse(course.id)}>Delete</Button>
                       <Button primary={true} to={`/manage-teaching/mycourse/${course.id}`}>View</Button>
                     </div>
                   </div>
+
+                  {selectedEditCourse === course.id && isOpenEditModal && <Modal
+                                                                            isOpen={isOpenEditModal}
+                                                                            onRequestClose={closeEditModal}
+                                                                            shouldCloseOnOverlayClick={true}
+                                                                          > 
+                                                                            <EditCourseForm id_course = {course.id} closeModal={closeEditModal}/>
+                                                                          </Modal>}
+                  {selectedDeleteCourse === course.id && isOpenDeleteModal && <Modal
+                                                                                isOpen={isOpenDeleteModal}
+                                                                                onRequestClose={closeDeleteModal}
+                                                                                shouldCloseOnOverlayClick={true}
+                                                                              > 
+                                                                                <DeleteCourseConfirm id_course = {course.id} closeModal = {closeDeleteModal}/>
+                                                                              </Modal>}
               </div>
               )
             })
@@ -159,16 +187,10 @@ const ManageTeaching = () => {
         onRequestClose={closeAddModal}
         shouldCloseOnOverlayClick={true}
       > 
-        <AddCourseForm closeModal={closeAddModal}/>
+        <AddCourseForm userID = {user._id} closeModal={closeAddModal}/>
       </Modal>}
       
-      {isOpenEditModal && <Modal
-        isOpen={isOpenEditModal}
-        onRequestClose={closeEditModal}
-        shouldCloseOnOverlayClick={true}
-      > 
-        <EditCourseForm closeModal={closeEditModal}/>
-      </Modal>}
+      
     </ManageTeachingStyle>
   );
 };

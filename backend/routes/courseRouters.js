@@ -8,15 +8,20 @@ const {
   getMyCourse,
   getCourseDetail,
   getChaptersOfCourse,
-  getLessonsOfChapter
-
+  getLessonsOfChapter,
+  addChapterToCourse,
+  updateChapterOfCourse,
+  deleteChapterOfCourse,
+  getSpecificChapter,
+  
 } = require("../controller/courseController");
 const { upload } = require("../middleware/uploader");
 
 router.route("/").get(getCourses).post(upload.single('image'),setCourses);
-router.route("/:id").put(updateCourses).delete(deleteCourses).get(getCourseDetail);
+router.route("/:id").put(upload.single('image'),updateCourses).delete(deleteCourses).get(getCourseDetail);
 router.route("/mycourse/:idUser").get(getMyCourse);
-router.route("/:id/chapter").get(getChaptersOfCourse);
-router.route("/:id/chapter/:idChapter").get(getLessonsOfChapter);
+router.route("/:id/chapter").get(getChaptersOfCourse).post(addChapterToCourse);
+router.route("/:id/chapter/:idChapter").put(updateChapterOfCourse).delete(deleteChapterOfCourse).get(getSpecificChapter)
+router.route("/:id/chapter/:idChapter/lessons").get(getLessonsOfChapter);
 
 module.exports = router;

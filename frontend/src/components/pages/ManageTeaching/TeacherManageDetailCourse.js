@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import styled from 'styled-components'
 import { faCaretDown, faPencil, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +9,9 @@ import Modal from '../../common/Modal';
 import AddLessonForm from '../../common/manage_course_form/AddLessonForm';
 import AddChapterForm from '../../common/manage_course_form/AddChapterForm';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import EditChapterForm from '../../common/manage_course_form/EditChapterForm';
+import EditLessonForm from '../../common/manage_course_form/EditLessonForm';
+import DeleteChapterConfirm from '../../common/manage_course_form/DeleteChapterConfirm';
 
 const DetailStyled = styled.div`
     .body{
@@ -97,8 +99,11 @@ const ListLesson = ({id_chapter, id_course})=>{
     const [lessons, setLessons] = useState([])
     const [watchLesson, setWatchLesson] = useState(null)
     const [openModal, setOpenModal] = useState(false);
+
+    const [showEditLessonModal, setShowEditLessonModal] = useState(false);
+    const [lessonSelected, setLessonSelected] = useState(null);
     const getLessonInChapter = async(idCourse, idChapter)=>{
-        const response = await axios.get(`http://localhost:5000/api/courses/${idCourse}/chapter/${idChapter}`)
+        const response = await axios.get(`http://localhost:5000/api/courses/${idCourse}/chapter/${idChapter}/lessons`)
         return response.data;
     }
 
@@ -109,6 +114,20 @@ const ListLesson = ({id_chapter, id_course})=>{
     const handleCloseModal = ()=>{
         setOpenModal(false)
     }
+
+    const openEditLessonModal = ()=>{
+        setShowEditLessonModal(true)
+    }
+
+    const closeEditLessonModal = ()=>{
+        setShowEditLessonModal(false)
+    }
+
+    const handelEditLesson = (id)=>{
+        setShowEditLessonModal(true)
+        setLessonSelected(id)
+    }
+
     useEffect(()=>{
         getLessonInChapter(id_course, id_chapter).then((result)=>{
             setLessons(result);
@@ -124,8 +143,8 @@ const ListLesson = ({id_chapter, id_course})=>{
             <ul className="">
                 {lessons &&  lessons.length >0 && lessons.map((lesson, index)=>{
                     return (
-                        <div key={index}>
-                            <li  className="course-lesson-item px-[20px] py-[8px]" >
+                        <li key={index}>
+                            <div  className="course-lesson-item px-[20px] py-[8px]" >
                                 {/* <a href="#">{index + 1}: {lesson.name}</a> */}
                                 <div onClick = {()=>handleWatchLesson(lesson.id)}>
                                     <p>{index + 1}: {lesson.name}</p>
@@ -133,14 +152,14 @@ const ListLesson = ({id_chapter, id_course})=>{
                                 </div>
 
                                 <div className="flex gap-x-3 z-10">
-                                    <div className="w-[40px] h-[40px] rounded-full border-2 flex items-center justify-center">
+                                    <div className="w-[40px] h-[40px] rounded-full border-2 flex items-center justify-center" onClick={()=>handelEditLesson(lesson.id)}>
                                         <FontAwesomeIcon icon={faPencil} className="text-[18px] text-[#4e4e4e]"/>
                                     </div>
                                     <div className="w-[40px] h-[40px] rounded-full border-2 flex items-center justify-center">
                                         <FontAwesomeIcon icon={faTrashCan} className="text-[18px] text-[#4e4e4e]"/>
                                     </div>
                                 </div>
-                            </li>
+                            </div>
                             
                             {watchLesson === lesson.id && 
                                 
@@ -152,7 +171,19 @@ const ListLesson = ({id_chapter, id_course})=>{
                                     <VideoLesson url_lesson={lesson.video} title_lesson = {lesson.name}/>
                                 </Modal>
                             }
-                        </div>
+
+                            {lessonSelected === lesson.id && showEditLessonModal && 
+                            
+                                <Modal
+                                    isOpen={showEditLessonModal}
+                                    onRequestClose={closeEditLessonModal}
+                                    shouldCloseOnOverlayClick={false}
+                                > 
+                                    <EditLessonForm id_lesson = {lesson.id} closeModal={closeEditLessonModal}/>
+                                </Modal>
+                            }
+
+                        </li>
                     )
                 })}
             </ul>
@@ -171,9 +202,13 @@ const TeacherManageDetailCourse = () => {
     const [course, setCourse] = useState(null)
     const [chapters, setChapters] = useState([])
     const [chapterExpand, setChapterExpand] = useState(null)
+    const [chapterSelected, setChapterSelected] = useState(null);
     const [showListLesson, setShowListLesson] = useState(false);
+
     const [showAddLessonModal, setShowAddLessonModal] = useState(false);
     const [showAddChapterModal, setShowAddChapterModal] = useState(false);
+    const [showEditChapterModal, setShowEditChapterModal] = useState(false);
+    const [showDeleteChapterModal, setShowDeleteChapterModal] = useState(false);
 
 
     const getDetailCourse = async(id)=>{
@@ -211,10 +246,29 @@ const TeacherManageDetailCourse = () => {
         setShowAddChapterModal(false)
     }
 
+    const closeEditChapterModal = ()=>{
+        setShowEditChapterModal(false);
+    }
+
+    const closeDeleteChapterModal = ()=>{
+        setShowDeleteChapterModal(false)
+    }
+
     const handleShowListLesson = (id)=>{
         setShowListLesson((prev)=>!prev)
         setChapterExpand(id)
     }
+
+    const handelEditChapter = (id)=>{
+        setShowEditChapterModal(true);
+        setChapterSelected(id)
+    }
+
+    const handleDeleteChapter = (id)=>{
+        setChapterSelected(id)
+        setShowDeleteChapterModal(true)
+    }
+
     return (
         <DetailStyled className="detail-course-container max-w-[1320px] mx-auto mb-[80px]">
             <h1 className="text-[46px] text-[var(--primary-color)] py-[40px]">Chi tiết khóa học</h1>
@@ -264,21 +318,34 @@ const TeacherManageDetailCourse = () => {
                     <ul className="h-[370px] overflow-x-hidden overflow-y-auto">
                         {chapters.length >0 && chapters.map((chapter, index)=>{
                             return (
-                                <div key={index}>
-                                <li  className="px-[20px] py-[8px] border-b-2 border-b-[#ccc] bg-[#f7f8fa] cursor-pointer">
-                                    {chapter.name}
+                                <li key={index}>
+                                <div  className="px-[20px] py-[8px] border-b-2 border-b-[#ccc] bg-[#f7f8fa] cursor-pointer">
+                                    {index + 1}. {chapter.name}
                                     <span className=" ml-[10px] w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick={()=>handleShowListLesson(chapter.id)}><FontAwesomeIcon icon={faCaretDown}/></span>
                                     <span className = " ml-[10px]  w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick={openAddLessonModal}><FontAwesomeIcon icon={faPlus}/></span>
-                                    <span className = " ml-[10px]  w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right"><FontAwesomeIcon icon={faPencil}/></span>
-                                    <span className = " ml-[10px]  w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right"><FontAwesomeIcon icon={faTrashCan}/></span>
+                                    <span className = " ml-[10px]  w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick={()=>handelEditChapter(chapter.id)}><FontAwesomeIcon icon={faPencil}/></span>
+                                    <span className = " ml-[10px]  w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick = {()=>handleDeleteChapter(chapter.id)}><FontAwesomeIcon icon={faTrashCan}/></span>
                                     <p className="text-[13px] text-[#aca7a7]">
                                         2/3 | 07:28
                                     </p>
-                                </li>
+                                </div>
 
                                     {chapterExpand === chapter.id && showListLesson && <ListLesson id_chapter = {chapter.id} id_course = {idCourse}/>}
-
-                                </div>
+                                    {chapterSelected === chapter.id && showEditChapterModal && (<Modal
+                                                                                                    isOpen={showEditChapterModal}
+                                                                                                    onRequestClose={closeEditChapterModal}
+                                                                                                    shouldCloseOnOverlayClick={true}
+                                                                                                > 
+                                                                                                    <EditChapterForm id_chapter = {chapter.id} id_course={idCourse} closeModal={closeEditChapterModal}/>
+                                                                                                </Modal>)}
+                                    {chapterSelected === chapter.id && showDeleteChapterModal && (<Modal
+                                                                                                        isOpen={showDeleteChapterModal}
+                                                                                                        onRequestClose={closeDeleteChapterModal}
+                                                                                                        shouldCloseOnOverlayClick={true}
+                                                                                                    > 
+                                                                                                        <DeleteChapterConfirm id_chapter = {chapter.id} id_course={idCourse} closeModal={closeDeleteChapterModal}/>
+                                                                                                    </Modal>)}
+                                </li>
                             )
                         })}
                     </ul>
@@ -303,7 +370,7 @@ const TeacherManageDetailCourse = () => {
                 onRequestClose={closeAddChapterModal}
                 shouldCloseOnOverlayClick={true}
             > 
-                <AddChapterForm closeModal={closeAddChapterModal}/>
+                <AddChapterForm id_course = {idCourse} closeModal={closeAddChapterModal}/>
             </Modal>
             }
 
