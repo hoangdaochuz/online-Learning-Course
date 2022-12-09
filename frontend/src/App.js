@@ -19,6 +19,7 @@ import Me from "./components/pages/me/Me";
 import Lessons from "./components/pages/lesson/Lessons";
 import ManageTeaching from "./components/pages/ManageTeaching/ManageTeaching";
 import TeacherManageDetailCourse from "./components/pages/ManageTeaching/TeacherManageDetailCourse";
+import Footer from "./components/common/footer/Footer";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           </Route>
         </Routes>
       </div>
+      <Footer/>
       <ToastContainer />
     </div>
   );
