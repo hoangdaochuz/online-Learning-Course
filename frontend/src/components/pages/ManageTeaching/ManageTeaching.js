@@ -116,7 +116,7 @@ const ManageTeaching = () => {
           {
             myCourses.length >0 && myCourses.map((course, index)=>{
               return (
-                <div className="" key={index}>
+                <div className="flex flex-col" key={index}>
                   <div className="w-full h-[250px] ">
                     <img
                       className="w-full h-full rounded-lg"
@@ -124,9 +124,9 @@ const ManageTeaching = () => {
                       alt=""
                     />
                   </div>
-                  <div className="mt-[12px]">
+                  <div className="mt-[12px] flex flex-col flex-1">
                     <h2 className="text-2xl font-semibold">{course.name}</h2>
-                    <div className="mt-[12px]">
+                    <div className="mt-[12px] mt-auto">
                       <div>
                         <FontAwesomeIcon
                           icon={faStar}

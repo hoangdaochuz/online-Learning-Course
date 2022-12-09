@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { Form, Formik, useField } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from "yup";
 
 const MyInput = ({ label, ...props }) => {
@@ -22,11 +24,9 @@ const MyInput = ({ label, ...props }) => {
     );
   };
 
-  const MyInputVideo = ({ label, ...props }) => {
+  const MyInputVideo = ({ label,oldVideo,getVideo, ...props }) => {
     const [field, meta] = useField(props);
     const [imgfile, uploadimg] = useState([]);
-    console.log(field)
-
     const imgFileHandler = (e)=>{
         if (e.target.files.length !== 0) {
             uploadimg(imgfile => [...imgfile, URL.createObjectURL(e.target.files[0])])
@@ -46,6 +46,7 @@ const MyInput = ({ label, ...props }) => {
           onChange = {(e)=>{
             field.onChange(e)
             imgFileHandler(e);
+            getVideo(e.target.files[0])
           }}
         />
 
@@ -56,6 +57,12 @@ const MyInput = ({ label, ...props }) => {
                 </span>
             )
         })}
+
+        {imgfile.length === 0 && (
+                <span className="block w-[100px] h-[100px]">
+                    <video src={oldVideo} className = "w-full h-full" alt="" />
+                </span>
+        )}
   
         {meta.touched && meta.error ? (
           <div className="text-red-600">{meta.error}</div>
@@ -63,26 +70,71 @@ const MyInput = ({ label, ...props }) => {
       </div>
     );
   };
-const EditLessonForm = ({id_lesson,closeModal}) => {
+const EditLessonForm = ({id_lesson, id_chapter, id_course,closeModal}) => {
+    const [oldLesson, setOldLesson] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [selectedVideo, setSelectedVideo] = useState(null)
+    const getOldInfoLesson = async()=>{
+      const response = await axios.get(`http://localhost:5000/api/courses/${id_course}/chapter/${id_chapter}/lessons/${id_lesson}`)
+      console.log(response.data)
+      return response.data
+    }
+
+    useEffect(()=>{
+      setLoading(true)
+      getOldInfoLesson().then((result)=>{
+        setOldLesson(result)
+        setLoading(false)
+      })
+    },[])
+
+    const handleSelectedVideo = (value)=>{
+      setSelectedVideo(value)
+    }
+
+    const updateLesson = async(data)=>{
+      const {name, video} = data
+      const formData = new FormData()
+      formData.append('name',name)
+      if(video){
+        formData.append('video',video)
+      }
+
+      const response = await axios.put(`http://localhost:5000/api/courses/${id_course}/chapter/${id_chapter}/lessons/${id_lesson}`, formData, {
+        headers: {
+          'Content-Type':  `multipart/form-data`,
+        }
+      })
+
+      return response.data
+
+    }
     return (
-        <Formik
+        !loading && <Formik
             initialValues={{
-                name: "",
-                image: "",
-                description: "",
-                price: "",
+                name: oldLesson.name || "",
+                video: "",
 
             }}
 
             validationSchema={Yup.object({
                 name: Yup.string().required("Required"),
-                image: Yup.string().required("Required"),
-                description: Yup.string().required("Required"),
-                price: Yup.string().required("Required"),
+                video: Yup.string()
             })}
 
             onSubmit = {(values)=>{
-                console.log(values);
+                const data = {
+                  name: values.name,
+                  video: selectedVideo || ""
+                }
+                updateLesson(data).then((result)=>{
+                  if(result.status === 'success'){
+                    toast.success('Update Lesson Successfully')
+                    window.location.reload()
+                  }else{
+                    toast.error('Something went wrong')
+                  }
+                })
             }}
         >
 
@@ -92,7 +144,7 @@ const EditLessonForm = ({id_lesson,closeModal}) => {
                     {/* Tên bài học */}
                     <MyInput label="Tên bài học" type="text" name="name" id="name" placeholder="Nhập tên bài học..." />
 
-                    <MyInputVideo label="Video" type="file" name="video" id="video"/>
+                    <MyInputVideo label="Video" type="file" name="video" id="video" oldVideo = {oldLesson.video} getVideo = {handleSelectedVideo}/>
                     <button className="float-right  ml-[20px] bg-[var(--primary-color)] text-white text-base px-[20px] py-[5px] rounded-lg" type="submit">LƯU</button>
                     <button className="float-right border bg-red-600 text-white text-base px-[20px] py-[5px] rounded-lg " onClick={closeModal}>HỦY</button>
                 </div>

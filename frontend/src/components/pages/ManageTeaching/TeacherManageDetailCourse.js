@@ -12,6 +12,7 @@ import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import EditChapterForm from '../../common/manage_course_form/EditChapterForm';
 import EditLessonForm from '../../common/manage_course_form/EditLessonForm';
 import DeleteChapterConfirm from '../../common/manage_course_form/DeleteChapterConfirm';
+import DeleteLessonConfirm from '../../common/manage_course_form/DeleteLessonConfirm';
 
 const DetailStyled = styled.div`
     .body{
@@ -101,6 +102,7 @@ const ListLesson = ({id_chapter, id_course})=>{
     const [openModal, setOpenModal] = useState(false);
 
     const [showEditLessonModal, setShowEditLessonModal] = useState(false);
+    const [showDeleteLessonModal, setShowDeleteLessonModal] = useState(false);
     const [lessonSelected, setLessonSelected] = useState(null);
     const getLessonInChapter = async(idCourse, idChapter)=>{
         const response = await axios.get(`http://localhost:5000/api/courses/${idCourse}/chapter/${idChapter}/lessons`)
@@ -123,9 +125,17 @@ const ListLesson = ({id_chapter, id_course})=>{
         setShowEditLessonModal(false)
     }
 
+    const closeDeleteLessonModal = ()=>{
+        setShowDeleteLessonModal(false);
+    }
     const handelEditLesson = (id)=>{
         setShowEditLessonModal(true)
         setLessonSelected(id)
+    }
+
+    const handleDeleteLesson = (id)=>{
+        setLessonSelected(id)
+        setShowDeleteLessonModal(true);
     }
 
     useEffect(()=>{
@@ -152,10 +162,10 @@ const ListLesson = ({id_chapter, id_course})=>{
                                 </div>
 
                                 <div className="flex gap-x-3 z-10">
-                                    <div className="w-[40px] h-[40px] rounded-full border-2 flex items-center justify-center" onClick={()=>handelEditLesson(lesson.id)}>
+                                    <div className="w-[30px] h-[30px] rounded-full border-2 flex items-center justify-center" onClick={()=>handelEditLesson(lesson.id)}>
                                         <FontAwesomeIcon icon={faPencil} className="text-[18px] text-[#4e4e4e]"/>
                                     </div>
-                                    <div className="w-[40px] h-[40px] rounded-full border-2 flex items-center justify-center">
+                                    <div className="w-[30px] h-[30px] rounded-full border-2 flex items-center justify-center" onClick = {()=>handleDeleteLesson(lesson.id)}>
                                         <FontAwesomeIcon icon={faTrashCan} className="text-[18px] text-[#4e4e4e]"/>
                                     </div>
                                 </div>
@@ -179,9 +189,17 @@ const ListLesson = ({id_chapter, id_course})=>{
                                     onRequestClose={closeEditLessonModal}
                                     shouldCloseOnOverlayClick={false}
                                 > 
-                                    <EditLessonForm id_lesson = {lesson.id} closeModal={closeEditLessonModal}/>
+                                    <EditLessonForm id_lesson = {lesson.id} id_chapter = {lesson.id_chapter} id_course = {id_course} closeModal={closeEditLessonModal}/>
                                 </Modal>
                             }
+
+                            {lessonSelected === lesson.id && showDeleteLessonModal && <Modal
+                                                                                            isOpen={showDeleteLessonModal}
+                                                                                            onRequestClose={closeDeleteLessonModal}
+                                                                                            shouldCloseOnOverlayClick={true}
+                                                                                        > 
+                                                                                            <DeleteLessonConfirm id_lesson = {lesson.id} id_chapter = {lesson.id_chapter} id_course = {id_course} closeModal={closeDeleteLessonModal}/>
+                                                                                        </Modal>}
 
                         </li>
                     )
@@ -231,10 +249,6 @@ const TeacherManageDetailCourse = () => {
             setChapters(result);
         })
     }, [])
-
-    const openAddLessonModal = ()=>{
-        setShowAddLessonModal(true)
-    }
     const closeAddLessonModal = ()=>{
         setShowAddLessonModal(false)
     }
@@ -267,6 +281,11 @@ const TeacherManageDetailCourse = () => {
     const handleDeleteChapter = (id)=>{
         setChapterSelected(id)
         setShowDeleteChapterModal(true)
+    }
+
+    const handleAddLesson = (id)=>{
+        setChapterSelected(id)
+        setShowAddLessonModal(true)
     }
 
     return (
@@ -313,21 +332,25 @@ const TeacherManageDetailCourse = () => {
                     </div>
                     <h2 className="font-semibold text-[16px] py-[12px] px-[16px] flex justify-between">
                         <span>Nội dung khóa học</span>
-                        <span className=" w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center cursor-pointer" onClick={openAddChapterModal}><FontAwesomeIcon icon={faPlus}/></span>
+                        <span className=" w-[30px] h-[30px] rounded-full border border-[#ccc] inline-flex items-center justify-center cursor-pointer" onClick={openAddChapterModal}><FontAwesomeIcon icon={faPlus}/></span>
                     </h2>
                     <ul className="h-[370px] overflow-x-hidden overflow-y-auto">
                         {chapters.length >0 && chapters.map((chapter, index)=>{
                             return (
                                 <li key={index}>
-                                <div  className="px-[20px] py-[8px] border-b-2 border-b-[#ccc] bg-[#f7f8fa] cursor-pointer">
-                                    {index + 1}. {chapter.name}
-                                    <span className=" ml-[10px] w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick={()=>handleShowListLesson(chapter.id)}><FontAwesomeIcon icon={faCaretDown}/></span>
-                                    <span className = " ml-[10px]  w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick={openAddLessonModal}><FontAwesomeIcon icon={faPlus}/></span>
-                                    <span className = " ml-[10px]  w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick={()=>handelEditChapter(chapter.id)}><FontAwesomeIcon icon={faPencil}/></span>
-                                    <span className = " ml-[10px]  w-[40px] h-[40px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick = {()=>handleDeleteChapter(chapter.id)}><FontAwesomeIcon icon={faTrashCan}/></span>
-                                    <p className="text-[13px] text-[#aca7a7]">
-                                        2/3 | 07:28
-                                    </p>
+                                <div  className="px-[20px] py-[8px] border-b-2 border-b-[#ccc] bg-[#f7f8fa] cursor-pointer flex justify-between">
+                                    <div>
+                                        {index + 1}. {chapter.name}
+                                        <p className="text-[13px] text-[#aca7a7]">
+                                            2/3 | 07:28
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <span className=" ml-[10px] w-[30px] h-[30px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick={()=>handleShowListLesson(chapter.id)}><FontAwesomeIcon icon={faCaretDown}/></span>
+                                        <span className = " ml-[10px]  w-[30px] h-[30px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick={()=>handleAddLesson(chapter.id)}><FontAwesomeIcon icon={faPlus}/></span>
+                                        <span className = " ml-[10px]  w-[30px] h-[30px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick={()=>handelEditChapter(chapter.id)}><FontAwesomeIcon icon={faPencil}/></span>
+                                        <span className = " ml-[10px]  w-[30px] h-[30px] rounded-full border border-[#ccc] inline-flex items-center justify-center float-right" onClick = {()=>handleDeleteChapter(chapter.id)}><FontAwesomeIcon icon={faTrashCan}/></span>
+                                    </div>
                                 </div>
 
                                     {chapterExpand === chapter.id && showListLesson && <ListLesson id_chapter = {chapter.id} id_course = {idCourse}/>}
@@ -345,6 +368,14 @@ const TeacherManageDetailCourse = () => {
                                                                                                     > 
                                                                                                         <DeleteChapterConfirm id_chapter = {chapter.id} id_course={idCourse} closeModal={closeDeleteChapterModal}/>
                                                                                                     </Modal>)}
+
+                                    {chapterSelected === chapter.id && showAddLessonModal &&  (<Modal
+                                                                                                    isOpen={showAddLessonModal}
+                                                                                                    onRequestClose={closeAddLessonModal}
+                                                                                                    shouldCloseOnOverlayClick={true}
+                                                                                                > 
+                                                                                                    <AddLessonForm id_chapter ={chapter.id} id_course = {idCourse} closeModal={closeAddLessonModal}/>
+                                                                                                </Modal>)}
                                 </li>
                             )
                         })}
@@ -353,17 +384,6 @@ const TeacherManageDetailCourse = () => {
             </div>
             </>
             }
-            
-            {showAddLessonModal && 
-            <Modal
-                isOpen={showAddLessonModal}
-                onRequestClose={closeAddLessonModal}
-                shouldCloseOnOverlayClick={true}
-            > 
-                <AddLessonForm closeModal={closeAddLessonModal}/>
-            </Modal>
-            }
-
             {showAddChapterModal && 
             <Modal
                 isOpen={showAddChapterModal}

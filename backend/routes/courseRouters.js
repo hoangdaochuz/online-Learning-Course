@@ -13,6 +13,10 @@ const {
   updateChapterOfCourse,
   deleteChapterOfCourse,
   getSpecificChapter,
+  addLessonToChapter,
+  updateLessonToChapter,
+  deleteLessonOfChapter,
+  getSpecificLesson
   
 } = require("../controller/courseController");
 const { upload } = require("../middleware/uploader");
@@ -22,6 +26,7 @@ router.route("/:id").put(upload.single('image'),updateCourses).delete(deleteCour
 router.route("/mycourse/:idUser").get(getMyCourse);
 router.route("/:id/chapter").get(getChaptersOfCourse).post(addChapterToCourse);
 router.route("/:id/chapter/:idChapter").put(updateChapterOfCourse).delete(deleteChapterOfCourse).get(getSpecificChapter)
-router.route("/:id/chapter/:idChapter/lessons").get(getLessonsOfChapter);
+router.route("/:id/chapter/:idChapter/lessons").get(getLessonsOfChapter).post(upload.single('video'),addLessonToChapter);
+router.route("/:id/chapter/:idChapter/lessons/:idLesson").put(upload.single('video'), updateLessonToChapter).delete(deleteLessonOfChapter).get(getSpecificLesson)
 
 module.exports = router;

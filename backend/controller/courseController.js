@@ -48,8 +48,19 @@ const updateCourses = asyncHandler(async (req, res) => {
 });
 const deleteCourses = asyncHandler(async (req, res) => {
   const id = req.params.id
-
-  const result = await db.connection.execute('DELETE FROM course WHERE course.id = ? ',[id])
+  let result = null;
+  let deleteChapter = null;
+  let deleteCourseUser = null;
+  const deleteLesson = await db.connection.execute('DELETE FROM lesson WHERE lesson.id_course = ? ',[id])
+  if(deleteLesson){
+    deleteChapter  = await db.connection.execute('DELETE FROM chapter where chapter.id_course = ? ',[id])
+  }
+  if(deleteChapter){
+    deleteCourseUser = await db.connection.execute('DELETE FROM user_course WHERE user_course.id_course = ?',[id])
+  }
+  if(deleteCourseUser){
+    result = await db.connection.execute('DELETE FROM course WHERE course.id = ? ',[id])
+  }
   if(result){
     res.status(200).json({status: 'success'});
   }else{
@@ -80,6 +91,7 @@ const getCourseDetail = asyncHandler(async (req, res)=>{
   }
 })
 
+// ================CHAPTER ========================
 const getChaptersOfCourse = asyncHandler(async(req,res)=>{
   const id = req.params.id
   const {name} = req.body
@@ -128,8 +140,11 @@ const updateChapterOfCourse = asyncHandler(async (req, res)=>{
 
 const deleteChapterOfCourse = asyncHandler(async (req, res)=>{
   const idChapter = req.params.idChapter
-
-  const result = await db.connection.execute('DELETE FROM chapter WHERE chapter.id = ? ', [idChapter])
+  let result = null;
+  const deleteLesson = await db.connection.execute('DELETE FROM lesson WHERE lesson.id_chapter = ? ',[idChapter])
+  if(deleteLesson){
+    result = await db.connection.execute('DELETE FROM chapter WHERE chapter.id = ? ', [idChapter])
+  }
   if(result){
     res.status(200).json({status: 'success'})
   }else{
@@ -149,6 +164,68 @@ const getLessonsOfChapter = asyncHandler(async(req,res)=>{
   }
 })
 
+const getSpecificLesson = asyncHandler(async(req, res)=>{
+  const idCourse = req.params.id
+  const idChapter = req.params.idChapter
+  const idLesson = req.params.idLesson
+
+  const lesson = await db.connection.execute('SELECT * FROM lesson WHERE lesson.id = ? and lesson.id_chapter = ?',[idLesson, idChapter])
+  if(lesson){
+    res.status(200).json(lesson[0][0])
+  }else{
+    res.status(400)
+    throw new Error('Lesson could not be found')
+  }
+
+})
+
+const addLessonToChapter = asyncHandler(async(req, res)=>{
+  const idCourse = req.params.id
+  const idChapter = req.params.idChapter
+  const {name} = req.body
+  const video = req.file.path
+  const result = await db.connection.execute('INSERT INTO lesson(id_chapter, id_course ,name,video) values(?,?,?,?)',[idChapter, idCourse,name,video])
+  if(result){
+    res.status(200).json({status: 'success'})
+  }else{
+    res.status(400).json({status: 'error'})
+  }
+})
+
+const updateLessonToChapter = asyncHandler(async (req, res)=>{
+  const idCourse = req.params.id
+  const idChapter = req.params.idChapter
+  const idLesson = req.params.idLesson
+  const {name} = req.body
+  let lesson = null
+
+  if(!req.file){
+    lesson = await db.connection.execute('UPDATE lesson SET name = ? WHERE lesson.id = ?',[name, idLesson])
+  }else{
+    const video = req.file.path
+    lesson = await db.connection.execute('UPDATE lesson SET name = ?, video = ? WHERE lesson.id = ?',[name,video, idLesson])
+  }
+
+  if(lesson){
+    res.status(200).json({status: 'success'})
+  }else{
+    res.status(400).json({status: 'error'})
+  }
+
+})
+
+
+
+const deleteLessonOfChapter = asyncHandler(async (req, res)=>{
+  const idLesson = req.params.idLesson
+
+  const result = await db.connection.execute('DELETE FROM lesson WHERE lesson.id = ?',[idLesson])
+  if(result){
+    res.status(200).json({status: 'success'})
+  }else{
+    res.status(400).json({status: 'error'})
+  }
+})
 
 module.exports = {
   setCourses,
@@ -163,4 +240,8 @@ module.exports = {
   updateChapterOfCourse,
   deleteChapterOfCourse,
   getSpecificChapter,
+  addLessonToChapter,
+  updateLessonToChapter,
+  deleteLessonOfChapter,
+  getSpecificLesson
 };
