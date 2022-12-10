@@ -20,6 +20,7 @@ import Lessons from "./components/pages/lesson/Lessons";
 import ManageTeaching from "./components/pages/ManageTeaching/ManageTeaching";
 import TeacherManageDetailCourse from "./components/pages/ManageTeaching/TeacherManageDetailCourse";
 import Footer from "./components/common/footer/Footer";
+import DetailCourse from "./components/pages/courses/DetailCourse";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route element={<Layout hideheaderPaths={["/login", "/signup"]} />}>
             <Route path="/" element={<Home />}></Route>
             <Route path="/courses" element={<Course />}></Route>
+            <Route path="/courses/:id" element={<DetailCourse />}></Route>
             <Route path="/about" element={<About />}></Route>
             <Route path="/team" element={<Team />}></Route>
             <Route path="/journal" element={<Journal />}></Route>

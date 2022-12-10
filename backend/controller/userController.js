@@ -85,6 +85,18 @@ const deleteUser = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id });
 });
 
+//@desc  Get user by id
+// @route GET api/users/id
+const getUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id); 
+  if(!user){
+    res.status(400);
+    throw Error("User not found");    
+  }else{
+    res.status(200).json(user);
+  }
+});
+
 //@desc  Login user
 //@route POST /api/users/login
 //@access Public
@@ -137,4 +149,5 @@ module.exports = {
   deleteUser,
   loginUser,
   getMe,
+  getUserById,
 };
