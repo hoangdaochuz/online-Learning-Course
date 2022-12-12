@@ -23,6 +23,7 @@ app.use("/api/users", require("./routes/userRouters"));
 app.use("/api/goals", require("./routes/goalRouters"));
 app.use("/api/team", require('./routes/teamRouters'));
 app.use("/api/lessons", require('./routes/lessonRouter'));
+app.use("/api/search", require('./routes/searchRouter'))
 app.use(errorHandler);
 app.listen(port, () => {
   console.log(`listening on port ${port}`);

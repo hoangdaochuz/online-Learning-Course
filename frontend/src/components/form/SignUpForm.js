@@ -3,7 +3,7 @@ import React from "react";
 import * as Yup from "yup";
 import {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import {useNavigate} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify'
 import {register, reset} from '../../features/auth/authSlice'
 
@@ -222,6 +222,8 @@ const SignUpForm = ({margin}) => {
             >
               Sign up
             </ButtonAuth>
+
+            <NavLink to="/login" className="my-[20px] block text-blue-600">Did you have an account ?Login now</NavLink>
           </Form>
         );
       }}

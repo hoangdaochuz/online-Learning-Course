@@ -21,6 +21,8 @@ import ManageTeaching from "./components/pages/ManageTeaching/ManageTeaching";
 import TeacherManageDetailCourse from "./components/pages/ManageTeaching/TeacherManageDetailCourse";
 import Footer from "./components/common/footer/Footer";
 import DetailCourse from "./components/pages/courses/DetailCourse";
+import Cart from "./components/cart/Cart";
+import Checkout from "./components/pages/checkout/Checkout";
 
 function App() {
   return (
@@ -45,10 +47,11 @@ function App() {
             <Route path="/lessons" element={<Lessons/>}></Route>
             <Route path="/manage-teaching" element={<ManageTeaching/>}></Route>
             <Route path="/manage-teaching/mycourse/:id" element={<TeacherManageDetailCourse />}></Route>
+            <Route path="/cart" element={<Cart />}></Route>
+            <Route path="/checkout" element={<Checkout />}></Route>
           </Route>
         </Routes>
       </div>
-      <Footer/>
       <ToastContainer />
     </div>
   );

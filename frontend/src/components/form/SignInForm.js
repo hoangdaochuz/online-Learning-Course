@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {toast} from 'react-toastify'
-import {useNavigate} from 'react-router-dom'
+import {NavLink, useNavigate} from 'react-router-dom'
 import {login, reset} from '../../features/auth/authSlice'
 
 const HeadingtAuth = styled.h1`
@@ -116,10 +116,14 @@ const SignInForm = ({margin}) => {
             >
               Sign in
             </ButtonAuth>
+
+            <NavLink to="/signup" className="my-[20px] block text-blue-600">Create New Account</NavLink>
           </Form>
+          
         );
       }}
     </Formik>
+    
   );
 };
 
