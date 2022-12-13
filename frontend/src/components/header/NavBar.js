@@ -221,10 +221,16 @@ const NavBar = ({ onClick }) => {
                   <FontAwesomeIcon icon={faUser} ></FontAwesomeIcon>
                 </div>
                 {user.job==='teacher' && (
-                  <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
-                  <NavLink to='/manage-teaching' className="text-base menu-user-link">Quản lý giảng dạy</NavLink>
-                  <FontAwesomeIcon icon={faGraduationCap} ></FontAwesomeIcon>
-                </div>
+                  <>
+                    <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
+                      <NavLink to='/manage-learning' className="text-base menu-user-link">Quản lý học tập</NavLink>
+                      <FontAwesomeIcon icon={faGraduationCap} ></FontAwesomeIcon>
+                    </div>
+                      <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
+                      <NavLink to='/manage-teaching' className="text-base menu-user-link">Quản lý giảng dạy</NavLink>
+                      <FontAwesomeIcon icon={faGraduationCap} ></FontAwesomeIcon>
+                    </div>
+                  </>
                 )}
                 {user.job==='admin' && (
                   <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
@@ -234,7 +240,7 @@ const NavBar = ({ onClick }) => {
                 )}
                 {user.job==='student' && (
                   <div className="border-b-2 py-2 px-3 w-full flex justify-between items-center">
-                  <NavLink className="text-base menu-user-link">Quản lý học tập</NavLink>
+                  <NavLink to='/manage-learning' className="text-base menu-user-link">Quản lý học tập</NavLink>
                   <FontAwesomeIcon icon={faGraduationCap} ></FontAwesomeIcon>
                 </div>
                 )}

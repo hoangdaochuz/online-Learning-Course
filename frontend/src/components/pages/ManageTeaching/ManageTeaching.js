@@ -101,7 +101,7 @@ const ManageTeaching = () => {
       <div className="manage-teaching-container max-w-[1320px] ml-auto mr-auto pt-[40px] pb-[40px]">
         <div className="flex justify-between items-center">
           <h1 className="text-[var(--primary-color)] text-[46px] text-center">
-            My courses
+            Manage teaching
           </h1>
           <div
             className="w-[50px] h-[50px] rounded-full bg-[var(--primary-color)] flex justify-center items-center inline-block"

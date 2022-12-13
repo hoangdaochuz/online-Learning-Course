@@ -5,8 +5,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { decreaseQuantityProduct, increaseQuantityProduct, removeProductFromCart } from '../../../features/cart/cartSlice';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+
+const CheckoutStyle = styled.div`
+  @media screen and (max-width: 1024px){
+    padding: 0 40px;    
+  }
+
+  @media screen and (max-width: 500px){
+    .checkout-heading{
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+    .cart-container{
+      margin-bottom: 20px;
+    }
+  }
+`
+
 
 const Checkout = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const handleTotalCostOfOneCourse = (price, quantity)=>{
     const total =  Number(price*quantity).toLocaleString('en-US')
@@ -22,13 +42,18 @@ const Checkout = () => {
     })
     return totalBill
   }
+
+  const handleCheckout = ()=>{
+    //.....
+    navigate('/thankyou')
+  }
   
   return (
-    <div className='my-[40px] max-w-[1320px] mx-auto'>
-      <h2 className='text-[46px] text-[var(--primary-color)] mb-[40px]'>Check out</h2>
+    <CheckoutStyle className='my-[40px] max-w-[1320px] mx-auto'>
+      <h2 className='checkout-heading text-[46px] text-[var(--primary-color)] mb-[40px]'>Check out</h2>
       <div>
-        <div>
-          <h3>Order detail</h3>
+        <div className=''>
+          <h3 className=' text-[20px] font-semibold'>Order detail</h3>
           
           <div>
             <div className='cart-container max-w-[1320px] mx-auto my-[40px] mb-[80px]'>
@@ -73,9 +98,9 @@ const Checkout = () => {
             </div>
 
             <div className=''>
-              <form action="">
+              <div>
                 <div className='max-w-[500px]'>
-                  <h3 className='mb-[6px]'>Payment Method</h3>
+                  <h3 className='mb-[12px] text-[20px] font-semibold'>Payment Method</h3>
                   <div className='flex justify-between items-center border-2 border-[#ccc]'>
                     <div className='px-4 py-3'>
                       <FontAwesomeIcon icon={faCreditCard} className="mr-[12px]"/>
@@ -104,16 +129,16 @@ const Checkout = () => {
                     <label htmlFor="expiryDateCard">Expiry date</label>
                     <input type="text" name="expiryDateCard" id = "expiryDateCard" placeholder='Expiry date' className='text-[#ccc] w-full py-[12px] px-[10px] text-[18px] mt-[6px] mb-[12px]'/>
 
-                    <button type='submit' className='ml-auto mt-[20px] px-[12px] py-[10px] bg-[var(--primary-color)] text-white'>COMPLETE CHECKOUT</button>
+                    <button type='submit' className='ml-auto mt-[20px] px-[12px] py-[10px] bg-[var(--primary-color)] text-white' onClick={handleCheckout}>COMPLETE CHECKOUT</button>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
           
         </div>
       </div>
-    </div>
+    </CheckoutStyle>
   );
 };
 

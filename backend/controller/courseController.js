@@ -227,6 +227,18 @@ const deleteLessonOfChapter = asyncHandler(async (req, res)=>{
   }
 })
 
+const getMaterialOfStudent = asyncHandler(async(req,res)=>{
+  const idStudent = req.params.idStudent
+  const result = await db.connection.execute(
+    'select course.id, course.id_author,course.name, course.image, course.description, course.rating, course.price from course, user_course where user_course.id_course = course.id and user_course.id_user = ?',[`${idStudent}`])
+  if(result){
+    res.status(200).json(result[0])
+  }else{
+    res.status(400)
+    throw new Error('Course not found')
+  }
+})
+
 module.exports = {
   setCourses,
   getCourses,
@@ -243,5 +255,6 @@ module.exports = {
   addLessonToChapter,
   updateLessonToChapter,
   deleteLessonOfChapter,
-  getSpecificLesson
+  getSpecificLesson,
+  getMaterialOfStudent,
 };
