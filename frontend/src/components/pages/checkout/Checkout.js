@@ -7,6 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { decreaseQuantityProduct, increaseQuantityProduct, removeProductFromCart } from '../../../features/cart/cartSlice';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useState } from 'react';
+import LoadingModal from '../../common/LoadingModal';
 
 const CheckoutStyle = styled.div`
   @media screen and (max-width: 1024px){
@@ -28,13 +32,14 @@ const CheckoutStyle = styled.div`
 const Checkout = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [loadingCheckout, setLoadingCheckout] = useState(true);
   const handleTotalCostOfOneCourse = (price, quantity)=>{
     const total =  Number(price*quantity).toLocaleString('en-US')
     return total
   }
 
   const cart_products = useSelector((state)=>state.cart.products)
-
+  const {user} = useSelector((state)=>state.auth)
   const handleTotalBill = ()=>{
     let totalBill = 0;
     cart_products.forEach((product)=>{
@@ -43,11 +48,33 @@ const Checkout = () => {
     return totalBill
   }
 
-  const handleCheckout = ()=>{
-    //.....
-    navigate('/thankyou')
+  const checkoutRequest = async(list_idCourse)=>{
+    const response = await axios.post(`http://localhost:5000/api/courses/payment/${user._id}`,list_idCourse)
+    return response.data
   }
-  
+
+  const handleCheckout = ()=>{
+    if(cart_products.length > 0){
+      const list_idCourse = cart_products.map((product)=>product.id)
+      setLoadingCheckout(true)
+      checkoutRequest(list_idCourse).then((result)=>{
+        setLoadingCheckout(false)
+        if(result.status==='Success'){
+          const timer = setTimeout(()=>{
+            toast.success('Payment Success')
+            navigate('/thankyou')
+          },3000) 
+        }else{
+          toast.success('Some thing went wrong')
+        }
+      })
+
+    }else{
+      toast.error("You don't have any course in cart")
+    }
+    // navigate('/thankyou')
+  }
+  console.log(cart_products)
   return (
     <CheckoutStyle className='my-[40px] max-w-[1320px] mx-auto'>
       <h2 className='checkout-heading text-[46px] text-[var(--primary-color)] mb-[40px]'>Check out</h2>

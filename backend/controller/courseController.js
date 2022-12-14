@@ -250,6 +250,21 @@ const checkOwnCourse = asyncHandler(async(req,res)=>{
   }
 })
 
+const makePaymentCourse = asyncHandler(async(req,res)=>{
+  const list_idCourse = req.body
+  const idStudent = req.params.idStudent
+  const list_response = list_idCourse.map(async(idCourse)=>{
+    return result = await db.connection.execute('INSERT INTO user_course(id_user,id_course) values(?,?)',[`${idStudent}`,`${idCourse}`])
+  })
+  for(let i=0;i<list_idCourse.length;i++){
+    if(!list_idCourse[i]){
+      res.status(400).json({status: 'Fail'})
+      return
+    }
+  }
+  res.status(200).json({status: 'Success'})
+})
+
 module.exports = {
   setCourses,
   getCourses,
@@ -268,5 +283,6 @@ module.exports = {
   deleteLessonOfChapter,
   getSpecificLesson,
   getMaterialOfStudent,
-  checkOwnCourse
+  checkOwnCourse,
+  makePaymentCourse
 };
