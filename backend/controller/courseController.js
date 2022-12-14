@@ -239,6 +239,17 @@ const getMaterialOfStudent = asyncHandler(async(req,res)=>{
   }
 })
 
+const checkOwnCourse = asyncHandler(async(req,res)=>{
+  const idCourse = req.params.idCourse
+  const idStudent = req.params.idStudent
+  const result = await db.connection.execute('SELECT * FROM user_course WHERE user_course.id_user = ? AND user_course.id_course = ? ',[`${idStudent}`, `${idCourse}`])
+  if(result[0][0]){
+    res.status(200).json({status: "own"})
+  }else{
+    res.status(200).json({status: "not-own"})
+  }
+})
+
 module.exports = {
   setCourses,
   getCourses,
@@ -257,4 +268,5 @@ module.exports = {
   deleteLessonOfChapter,
   getSpecificLesson,
   getMaterialOfStudent,
+  checkOwnCourse
 };

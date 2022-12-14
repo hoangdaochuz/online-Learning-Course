@@ -166,6 +166,8 @@ const ManageLearningDetail = () => {
     const [showListLesson, setShowListLesson] = useState(false);
     const [loadingDetail, setLoadingDetail] = useState(true);
     const [loadingChapter, setLoadingChapter] = useState(true)
+    const [author, setAuthor] = useState(null);
+    const [loadingAuthor, setLoadingAuthor] = useState(true)
     const getDetailCourse = async(id)=>{
         const response = await axios.get(`http://localhost:5000/api/courses/${id}`)
         console.log(response.data)
@@ -176,6 +178,21 @@ const ManageLearningDetail = () => {
         const response = await axios.get(`http://localhost:5000/api/courses/${id}/chapter`)
         return response.data
     }
+
+    const getAuthorInfo = async(id_author)=>{
+      const response = await axios.get(`http://localhost:5000/api/users/${id_author}`)
+      return response.data;
+    }
+
+    useEffect(()=>{
+      if(course){
+        setLoadingAuthor(true);
+        getAuthorInfo(course.id_author).then((result)=>{
+          setAuthor(result);
+          setLoadingAuthor(false)
+        })
+      }
+    },[course])
 
     useEffect(() =>{
         setLoadingDetail(true)
@@ -233,6 +250,10 @@ const ManageLearningDetail = () => {
                   <FontAwesomeIcon className="text-yellow-500" icon={faStar} />
                   <FontAwesomeIcon className="text-yellow-500" icon={faStar} />
                 </div>
+
+                {loadingAuthor ? <Loading width={'30px'} height={'30px'}/> : (
+                            <span className='mt-[20px] block'>Lecture: {author?.fullname}</span>
+                )}
               </div>
             </div>
             <div>

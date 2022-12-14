@@ -14,7 +14,7 @@ const SuccessOrder = () => {
         <h1 className='text-[64px] font-light mb-[8px]'>Thank you!</h1>
         <p className='text-[20px] font-light mb-[48px] text-[#6a6a6a]'>You order was successfully completed</p>
 
-        <button className='text-[14px] text-white px-[30px] py-[12px] bg-[var(--primary-color)] font-semibold mr-[80px]'>Go to manage learning</button>
+        <NavLink to="/manage-learning" className='text-[14px] text-white px-[30px] py-[12px] bg-[var(--primary-color)] font-semibold mr-[80px]'>Go to manage learning</NavLink>
         <NavLink to = '/' className='text-[14px] text-white px-[30px] py-[12px] bg-[var(--primary-color)] font-semibold'>Back to home</NavLink>
       </div>
     </div>

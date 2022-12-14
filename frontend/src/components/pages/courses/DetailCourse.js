@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { faFileArrowDown, faFilePdf, faMobileAndroid, faStar, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { faSquareYoutube } from '@fortawesome/free-brands-svg-icons';
@@ -65,12 +65,18 @@ const DetailCourse = () => {
   const [loadingDetailCourse, setLoadingDetailCourse] = useState(true)
   const[loadingChapters, setLoadingChapters] = useState(true)
   const [loadingAuthor, setLoadingAuthor] = useState(true)
+  const [own, setOwn] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const {user} = useSelector((state)=>state.auth)
   const getDetailCourse = async()=>{
     const response = await axios.get(`http://localhost:5000/api/courses/${idCourse}`)
     return response.data
+  }
+
+  const checkOwnCourse = async()=>{
+    const response =await axios.get(`http://localhost:5000/api/courses/check-own/${user._id}/${idCourse}`)
+    return response.data.status
   }
 
   const getListChapterOfCourse = async()=>{
@@ -100,6 +106,16 @@ const DetailCourse = () => {
       clearTimeout(timer)
     }
 
+  },[])
+
+  useEffect(()=>{
+    checkOwnCourse().then((result)=>{
+      if(result === "own"){
+        setOwn(true)
+      }else{
+        setOwn(false)
+      }
+    })
   },[])
 
   useEffect(()=>{
@@ -213,59 +229,67 @@ const DetailCourse = () => {
                     </video>
                   </div>
                   <div className='mt-[20px] mb-[20px]'>
-                    <h2 className='text-[24px] font-semibold text-[var(--primary-color)] mb-[10px]'>{course.price} VNĐ</h2>
+                    {!own && <h2 className='text-[24px] font-semibold text-[var(--primary-color)] mb-[10px]'>{course.price} VNĐ</h2>}
+                    
                     <div className='flex flex-col gap-y-4'>
-                      <button className='px-[15px] py-[10px] bg-[var(--primary-color)] text-white font-semibold text-[18px] rounded-md' 
-                        onClick={()=>handleAddToCart({
-                          id: course.id,
-                          name: course.name,
-                          image: course.image,
-                          price: course.price
-                        })}
-                      >Add to cart</button>
-                      <button className='px-[15px] py-[10px] bg-white text-[var(--primary-color)]  border-2 border-[#ccc] font-semibold text-[18px] rounded-md'
-                        onClick={()=>handleBuyCourse({
-                          id: course.id,
-                          name: course.name,
-                          image: course.image,
-                          price: course.price
-                        })}
-                      >Buy now</button>
+                      {own ? (<NavLink to={`/manage-learning/${idCourse}`} className='px-[15px] py-[10px] bg-[var(--primary-color)] text-white font-semibold text-[18px] rounded-md'
+                      >Keep Learning</NavLink>):(
+                        <>
+                          <button className='px-[15px] py-[10px] bg-[var(--primary-color)] text-white font-semibold text-[18px] rounded-md' 
+                            onClick={()=>handleAddToCart({
+                              id: course.id,
+                              name: course.name,
+                              image: course.image,
+                              price: course.price
+                            })}
+                          >Add to cart</button>
+                          <button className='px-[15px] py-[10px] bg-white text-[var(--primary-color)]  border-2 border-[#ccc] font-semibold text-[18px] rounded-md'
+                            onClick={()=>handleBuyCourse({
+                              id: course.id,
+                              name: course.name,
+                              image: course.image,
+                              price: course.price
+                            })}
+                          >Buy now</button>
+                        </>
+                      )}
                     </div>
-                    <p className='text-center mt-[12px] text-[#1c1d1f]'>30-Day Money-Back Guarantee</p>
+                    {!own && <p className='text-center mt-[12px] text-[#1c1d1f]'>30-Day Money-Back Guarantee</p>}
+                    
                   </div>
-
-                  <div className='mt-[12px]'>
-                    <h2 className='font-semibold text-[18px]'>This course includes:</h2>
-                    <div>
-                      <ul>
-                        <li className='py-[5px]'>
-                          <div className='flex gap-x-3 items-center'>
-                            <FontAwesomeIcon icon={faSquareYoutube}/>
-                            <p>31.5 hours on-demand video</p>
-                          </div>
-                        </li>
-                        <li className='py-[5px]'>
-                          <div className='flex gap-x-3 items-center'>
-                            <FontAwesomeIcon icon={faFilePdf}/>
-                            <p>81 articles</p>
-                          </div>
-                        </li>
-                        <li className='py-[5px]'>
-                          <div className='flex gap-x-3 items-center'>
-                            <FontAwesomeIcon icon={faMobileAndroid}/>
-                            <p>64 downloadable resources</p>
-                          </div>
-                        </li>
-                        <li className='py-[5px]'>
-                          <div className='flex gap-x-3 items-center'>
-                            <FontAwesomeIcon icon={faTrophy}/>
-                            <p>Certificate of completion</p>
-                          </div>
-                        </li>
-                      </ul>
+                  {!own && 
+                    <div className='mt-[12px]'>
+                      <h2 className='font-semibold text-[18px]'>This course includes:</h2>
+                      <div>
+                        <ul>
+                          <li className='py-[5px]'>
+                            <div className='flex gap-x-3 items-center'>
+                              <FontAwesomeIcon icon={faSquareYoutube}/>
+                              <p>31.5 hours on-demand video</p>
+                            </div>
+                          </li>
+                          <li className='py-[5px]'>
+                            <div className='flex gap-x-3 items-center'>
+                              <FontAwesomeIcon icon={faFilePdf}/>
+                              <p>81 articles</p>
+                            </div>
+                          </li>
+                          <li className='py-[5px]'>
+                            <div className='flex gap-x-3 items-center'>
+                              <FontAwesomeIcon icon={faMobileAndroid}/>
+                              <p>64 downloadable resources</p>
+                            </div>
+                          </li>
+                          <li className='py-[5px]'>
+                            <div className='flex gap-x-3 items-center'>
+                              <FontAwesomeIcon icon={faTrophy}/>
+                              <p>Certificate of completion</p>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                  </div>
+                  }
                 </div>
             </div>
             </>

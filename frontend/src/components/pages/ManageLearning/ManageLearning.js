@@ -4,8 +4,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import Button from '../../common/Button';
 import Loading from '../../common/Loading';
+import EmptyManageLearning from './EmptyManageLearning';
 
 
 
@@ -34,6 +34,7 @@ const ManageLearning = () => {
   return (
     <div className='max-w-[1320px] mx-auto py-[40px]'>
       <h2 className='text-[46px] text-[var(--primary-color)] mb-[40px]'>Manage learning</h2>
+      {courses.length === 0  && <EmptyManageLearning/>}
       <div className='grid grid-cols-3 gap-10'>
         {courses.length >0 && courses.map((course, index)=>{
           
@@ -70,8 +71,6 @@ const ManageLearning = () => {
                     className="text-[var(--primary-color)]"
                   />
                 </div>
-
-                <h3 className="mt-[8px]">Cenadarealgod</h3>
               </div>
               <div className="flex gap-5 mt-5">
                 <NavLink to={`/manage-learning/${course.id}`} className="py-[10px] px-[15px] bg-[var(--primary-color)] text-white font-semibold">Keep Learning</NavLink>

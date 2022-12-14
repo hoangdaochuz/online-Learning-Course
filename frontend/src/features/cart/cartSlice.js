@@ -1,8 +1,10 @@
 
 import { createSlice } from '@reduxjs/toolkit';
+
+const {total_product,products} = JSON.parse(localStorage.getItem('cart'))
 const initialState = {
-  total_product: 0,
-  products: []
+  total_product: total_product?total_product:0,
+  products: products.length >0 ? products : []
 }
 
 const cartSlice = createSlice({
@@ -20,6 +22,7 @@ const cartSlice = createSlice({
         total_product: state.total_product +1,
         products: state.products.map((product)=>product.id === action.payload?{...product, quantity: product.quantity +1}: product)
       }
+      localStorage.setItem('cart', JSON.stringify(result))
       return result     
     },
     decreaseQuantityProduct: (state,action)=>{
@@ -36,6 +39,7 @@ const cartSlice = createSlice({
           total_product: state.total_product -1,
           products: state.products.map((product)=>product.id === action.payload?{...product, quantity: product.quantity -1}: product)
         }
+        localStorage.setItem('cart', JSON.stringify(result))
         return result
       }
     },
@@ -88,6 +92,7 @@ const cartSlice = createSlice({
   
         }
       }
+      localStorage.setItem('cart', JSON.stringify(result))
       return result
     },
     removeProductFromCart: (state, action)=>{
@@ -99,13 +104,18 @@ const cartSlice = createSlice({
           quantity = state.products[i].quantity
         }
       }
-      return {
+      
+      const result = {
         ...state,
         total_product: state.total_product - quantity,
         products: state.products.filter((product)=>{
           return product.id !== action.payload
         })
       }
+
+      localStorage.setItem('cart', JSON.stringify(result))
+
+      return result
     }
   }
 })

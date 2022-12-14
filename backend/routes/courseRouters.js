@@ -17,7 +17,8 @@ const {
   updateLessonToChapter,
   deleteLessonOfChapter,
   getSpecificLesson,
-  getMaterialOfStudent
+  getMaterialOfStudent,
+  checkOwnCourse
   
 } = require("../controller/courseController");
 const { upload } = require("../middleware/uploader");
@@ -32,6 +33,5 @@ router.route("/:id/chapter/:idChapter/lessons/:idLesson").put(upload.single('vid
 // Student
 
 router.route("/mymaterial/:idStudent").get(getMaterialOfStudent)
-
-
+router.route("/check-own/:idStudent/:idCourse").get(checkOwnCourse)
 module.exports = router;
