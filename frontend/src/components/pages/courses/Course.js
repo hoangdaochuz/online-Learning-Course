@@ -130,7 +130,7 @@ const Course = () => {
   }
 
   return (
-    <CourseStyle className="max-w-[1320px] mx-auto">
+    <CourseStyle className="max-w-[1320px] mx-auto pb-[128px]">
       <div className="course-heading-container mb-[80px] mt-[80px] flex justify-between items-center">
         <div>
             <h2 className="course-heading-title text-[46px] text-[var(--primary-color)]">Danh sách các khóa học</h2>
