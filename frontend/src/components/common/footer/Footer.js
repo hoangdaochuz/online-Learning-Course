@@ -251,7 +251,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className='text-center py-[48px] bg-[#E9E9E9]'>
-                <p>Copyright ©2022 All rights reserved | This template is made with  by <a href="https://colorlib.com/wp/template/academia/" className='text-[var(--primary-color)]'>Colorlib</a></p>
+                <p>Copyright ©2022 All rights reserved | This template is made with  by <a href="https://colorlib.com/wp/template/academia/" target="_blank" className='text-[var(--primary-color)]'>Colorlib</a></p>
             </div>
         </FooterStyle>
     );
