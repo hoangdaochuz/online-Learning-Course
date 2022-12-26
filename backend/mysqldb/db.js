@@ -8,7 +8,7 @@ const db = {connection: null};
     host: 'localhost',
     user: 'root',
     password: '280502',
-    database: 'online-learning-course-db'
+    database: 'online-learning-course'
   });
   console.log('Database connected!');
 })();
