@@ -10,6 +10,18 @@ const getUsers = asyncHandler(async (req, res) => {
   res.status(200).json(users);
 });
 
+//@desc  Get list users
+//@route GET /api/users/management-accounts                                             
+//@access Public
+const getUsersWithoutAdmin = asyncHandler(async (req, res) => {
+  try {
+    const users = await User.find({$or: [{job: "student"}, {job: "teacher"}]}).select("-password");
+    res.status(200).json(users);
+  } catch(error) {
+    res.status(404).json({message: error.message})
+  }
+});
+
 //@desc  Register users
 //@route POST /api/users/
 //@access Public
@@ -142,6 +154,7 @@ const generateToken = (id) =>{
   })
 }
 
+
 module.exports = {
   getUsers,
   registerUser,
@@ -150,4 +163,5 @@ module.exports = {
   loginUser,
   getMe,
   getUserById,
+  getUsersWithoutAdmin
 };
