@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 //@desc  Get list users
-//@route GET /api/users/list
+//@route GET /api/users/list                                              
 //@access Public
 const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find();

@@ -66,7 +66,7 @@ const Course = () => {
   const searchValueDebounce = useDebounce(searchQuery,1000)
   const searchRef = useRef(null)
   const {user} = useSelector((state)=>state.auth)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch()                                              
   const navigate = useNavigate()
   const getAllCourse = async(queryString) => {
     setLoading(true)
@@ -89,6 +89,7 @@ const Course = () => {
       clearTimeout(timer)
     }
   },[searchValueDebounce, search])
+  
 
   useEffect(()=>{
     if(!loading){

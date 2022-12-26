@@ -27,6 +27,17 @@ import SuccessOrder from "./components/pages/successOrder/SuccessOrder";
 import ManageLearning from "./components/pages/ManageLearning/ManageLearning";
 import ManageLearningDetail from "./components/pages/ManageLearning/ManageLearningDetail";
 
+import { BrowserRouter, Navigate} from "react-router-dom";
+import Dashboard from "adminPages/dashboard";
+import Performance from "adminPages/performance";
+import AdminManagementCourses from "adminPages/managementCourses";
+import AdminManagementAccounts from "adminPages/managementAccounts";
+import AdminManagementRevenue from "adminPages/managementRevenue";
+import AdminManagementBlogs from "adminPages/managementBlogs";
+import AdminManagementProfile from "adminPages/managementProfile";
+import AdminLayout from "adminLayout";
+
+
 function App() {
   return (
     <div>
@@ -55,6 +66,15 @@ function App() {
             <Route path="/thankyou" element={<SuccessOrder />}></Route>
             <Route path="/manage-learning" element={<ManageLearning />}></Route>
             <Route path="/manage-learning/:id" element={<ManageLearningDetail />}></Route>
+          </Route>
+          <Route element={<AdminLayout/>}>
+            <Route path="/dashboard" element={<Dashboard/>}/> 
+            <Route path="/performance" element={<Performance/>}/> 
+            <Route path="/management-courses" element={<AdminManagementCourses/>}/>
+            <Route path="/management-accounts" element={<AdminManagementAccounts/>}/>
+            <Route path="/management-revenue" element={<AdminManagementRevenue/>}/>
+            <Route path="/management-blogs" element={<AdminManagementBlogs/>}/>
+            <Route path="/management-profile/edit-profile" element={<AdminManagementProfile/>}/>
           </Route>
         </Routes>
       </div>
