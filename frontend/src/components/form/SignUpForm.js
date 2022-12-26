@@ -89,7 +89,11 @@ const SignUpForm = ({margin}) => {
       }
 
       if(isSuccess|| user){
-        navigate('/')
+        if(user.job === 'admin') {
+          navigate('/dashboard')
+        } else {
+          navigate('/')
+        }
         toast.success("Sign up successfully")
       }
       dispatch(reset())

@@ -48,7 +48,11 @@ const SignInForm = ({margin}) => {
     }
 
     if(isSuccess || user){
-      navigate('/')
+      if(user.job === 'admin') {
+        navigate('/dashboard')
+      } else {
+        navigate('/')
+      }
     }
     dispatch(reset())
   },[user,isLoading,isError,isSuccess,message, navigate, dispatch])
