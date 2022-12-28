@@ -10,7 +10,9 @@ import {
     Button,
     Rating,
     useMediaQuery,
-    Stack
+    Stack,
+    ActionButton,
+    Link
 } from "@mui/material";
 import Header from "../../adminComponents/Header";
 import { React, useState, useEffect } from 'react';
@@ -19,6 +21,8 @@ import { useNavigate } from 'react-router-dom';
 import { AddCircleOutlineOutlined } from '@mui/icons-material';
 import FlexBetween from 'adminComponents/FlexBetween';
 import useDebounce from "../../myhooks/useDebounce";
+import ConfirmDialog from "./confirmDialogDeleteBlog";
+import AdminEditBlog from "./editBlog";
 
 const AdminManagementBlog = ({
     id,
@@ -28,8 +32,15 @@ const AdminManagementBlog = ({
     start_date,
     end_date,
   }) => {
+    const navigate = useNavigate();
     const theme = useTheme();
     const [isExpanded, setIsExpanded] = useState(false);
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: ''})
+
+    const handleDeleteBlog = async (id) => {
+        const response = await axios.delete(`http://localhost:5000/api/blogs/${id}`)
+        return response.data
+    }
     
     return (
       <Card
@@ -73,12 +84,21 @@ const AdminManagementBlog = ({
                     sx={{ color: theme.palette.secondary[100] }}
                     size="medium"
                     className="btns-manage-blogs-item"
+                    onClick={() => navigate(`/management-blogs/edit-blog/${id}`)}
                 >Edit</Button>
                 <Button 
                     variant="contained" 
                     sx={{ color: theme.palette.secondary[100] }}
                     size="medium"
                     className="btns-manage-blogs-item"
+                    onClick={() => {
+                        setConfirmDialog({
+                            isOpen: true,
+                            title: 'Are you sure to delete this blog?',
+                            subTitle: "You can't undo this operation",
+                            id: id
+                        })
+                    }}
                 >Remove</Button>
                 {/* <CardActions pt="10px">
                     <Button
@@ -114,6 +134,11 @@ const AdminManagementBlog = ({
             <Typography>Description: {description}</Typography>
           </CardContent>
         </Collapse>
+        <ConfirmDialog
+            confirmDialog={confirmDialog}
+            setConfirmDialog={setConfirmDialog}
+            id={id}
+        />
       </Card>
     );
   };

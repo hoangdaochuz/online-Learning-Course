@@ -12,6 +12,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.1",
+    "@mui/styles": "^5.11.2",
     "@mui/x-data-grid": "^5.17.16",
     "@nivo/bar": "^0.80.0",
     "@nivo/core": "^0.80.0",

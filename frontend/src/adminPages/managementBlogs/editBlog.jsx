@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { Form, Formik, useField } from 'formik';
 import { toast } from 'react-toastify';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation} from 'react-router-dom';
 import { Box, Typography, useTheme, IconButton, TextField, Input, TextareaAutosize,
 FormControl, InputLabel, FormHelperText, Stack} from "@mui/material";
 import Button from '@mui/material/Button';
 import { AddCircleOutlineOutlined, HighlightOffOutlined } from '@mui/icons-material';
+import ConfirmDialogUpdate from "./confirmDialogUpdateBlog";
+import useDebounce from "../../myhooks/useDebounce";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import "./blog.css";
 
-const AdminAddBlog = () => {
+const AdminEditBlog = () => {
     const styleInput = {
         width: "100%",
         backgroundColor: "transparent",
@@ -26,6 +27,9 @@ const AdminAddBlog = () => {
         height: "150px"
     }
     
+    const {pathname} = useLocation()
+    const pathStringArray = pathname.split('/')
+    const id_blog = pathStringArray[pathStringArray.length - 1]
 
     function convertDate(str) {
         var date = new Date(str),
@@ -56,6 +60,11 @@ const AdminAddBlog = () => {
 
     const theme = useTheme();
     const navigate = useNavigate();
+    const [searchQuery, setSearchQuery] = useState("");
+    const [blog, setBlog] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const searchValueDebounce = useDebounce(searchQuery, 1000);
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: ''})
 
     const handleRefresh = () => {
         setImage('')
@@ -63,24 +72,32 @@ const AdminAddBlog = () => {
         setDescription('')  
     }
 
-    const addBlog = async(data)=>{
-        const {title, description, image, startDate, endDate} = data
-        const formData = new FormData();
-        formData.append('title', title)
-        formData.append('description', description)
-        formData.append('image', image)
-        formData.append('startDate', startDate)
-        formData.append('endDate', endDate)
-
-        const response = await axios.post('http://localhost:5000/api/blogs/add', formData,
-        {
-          headers: {
-            'Content-Type':  "multipart/form-data",
-          }
-        })
-        console.log(response)
+    const getInfoBlog = async() => {
+        const response = await axios.get(`http://localhost:5000/api/blogs/detail/${id_blog}`)
         return response.data
     }
+
+    useEffect(() => {
+        setLoading(true);
+        const timer = setTimeout(() => {
+            getInfoBlog(searchValueDebounce).then((result) => {
+            setBlog(result);
+            setLoading(false);
+
+            setLoading(false);
+            if(result.title !== undefined) {
+                setImage(result.image)
+                setTitle(result.title)
+                setDescription(result.description)
+                setStartDate(new Date(result.start_date))
+                setEndDate(new Date(result.end_date))
+            }
+        });
+        }, 500);
+        return () => {
+        clearTimeout(timer);
+        };
+    }, [searchValueDebounce]);
 
     return (
         <Box
@@ -116,7 +133,7 @@ const AdminAddBlog = () => {
                         required
                         id="title"
                         name="title"
-                        placeholder="Please enter a title..."
+                        placeholder='Please enter a title...'
                         sx={{...styleInput}}
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
@@ -129,7 +146,7 @@ const AdminAddBlog = () => {
                         required
                         id="description"
                         name="description"
-                        placeholder="Please enter a description..."
+                        placeholder='Please enter a description...'
                         style={{...styleTextArea, ...styleInput}}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
@@ -180,39 +197,35 @@ const AdminAddBlog = () => {
                         color="error" 
                         size="medium"
                         className="btn-refresh-add-blog"
-                        onClick={handleRefresh}
+                        onClick={() => window.location.reload()}
                     >Refresh</Button>
                     <Button 
                         variant="contained" 
                         color="success" 
                         size="medium"
-                        type="submit"
-                        onClick = {(e)=>{
-                            e.preventDefault()
-                            const data = {
-                              title: title,
-                              image: imageFile,
-                              description: description,
-                              startDate: convertDate(startDate),
-                              endDate: convertDate(endDate)
-                            }
-              
-                            addBlog(data).then((result)=>{
-                              if(result.status ==='success'){
-                                toast.success('Add Course Successfully')
-                                setTimeout(() => window.location.reload(), 1000)
-                              }else{
-                                toast.error('Some thing went wrong')
-                              }
+                        onClick={() => {
+                            setConfirmDialog({
+                                isOpen: true,
+                                title: 'Are you sure to update this blog?',
+                                subTitle: "You can't undo this operation",
                             })
-              
-                          }}
-                    >Post</Button>
+                        }}
+                    >Update</Button>
                 </Stack>
             </Box>
+            <ConfirmDialogUpdate
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+                id_blog={id_blog}
+                title={title}
+                description={description}
+                image={imageFile}
+                startDate={convertDate(startDate)}
+                endDate={convertDate(endDate)}
+            />
         </Box>
     )
 }
 
-export default AdminAddBlog;
+export default AdminEditBlog;
 

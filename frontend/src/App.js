@@ -35,6 +35,7 @@ import AdminManagementAccounts from "adminPages/managementAccounts";
 import AdminManagementRevenue from "adminPages/managementRevenue";
 import AdminManagementBlogs from "adminPages/managementBlogs/viewMyBlogs";
 import AdminAddBlog from "adminPages/managementBlogs/addBlog";
+import AdminEditBlog from "adminPages/managementBlogs/editBlog";
 import AdminManagementProfile from "adminPages/managementProfile";
 import AdminLayout from "adminLayout";
 
@@ -75,6 +76,7 @@ function App() {
             <Route path="/management-revenue" element={<AdminManagementRevenue/>}/>
             <Route path="/management-blogs" element={<AdminManagementBlogs/>}/>
             <Route path="/management-blogs/add-blog" element={<AdminAddBlog/>}/>
+            <Route path="/management-blogs/edit-blog/:id" element={<AdminEditBlog/>}/>
             <Route path="/management-profile/edit-profile" element={<AdminManagementProfile/>}/>
           </Route>
         </Routes>
