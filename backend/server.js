@@ -1,5 +1,5 @@
 const express = require("express");
-const bodyParser = require("body-parser");
+var bodyParser = require("body-parser");
 const path = require("path");
 const colors = require("colors");
 const { errorHandler } = require("./middleware/errorMiddleware");
@@ -33,6 +33,7 @@ app.use("/api/goals", require("./routes/goalRouters"));
 app.use("/api/team", require('./routes/teamRouters'));
 app.use("/api/lessons", require('./routes/lessonRouter'));
 app.use("/api/search", require('./routes/searchRouter'))
+app.use("/api/blogs", require("./routes/blogRouters"));
 app.use(errorHandler);
 
 // ROUTES

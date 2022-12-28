@@ -181,7 +181,7 @@ const Sidebar = ({
             </List>
           </Box>
 
-          <Box position="absolute" bottom="2rem">
+          <Box position="absolute" bottom="2rem" className="sidebar-profile-bottom">
             <Divider />
             <FlexBetween textTransform="none" gap="1rem" m="1.5rem 2rem 0 1.5rem">
               <Box

@@ -1,0 +1,45 @@
+@media screen and (max-width: 500px){
+    .date-picker-apply {
+        display: block !important;
+        margin-top: 10px;
+    }
+    .date-picker-apply-item {
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (max-width: 400px){
+    .btn-refresh-add-blog {
+        display: none !important;
+    }
+    .btns-control-add-blog {
+        justify-content: space-between !important;
+        margin-bottom: 10px !important;
+    }
+    .btns-manage-blogs {
+        flex-direction: column !important;
+    }
+    .btns-manage-blogs-item {
+        margin-top: 5px !important;
+        margin-left: 0 !important;
+    }
+}
+  
+input, textarea {
+    color: black;
+    padding-left: 10px;
+    height: 40px;
+    width: inherit;
+}
+
+.btns-control-add-blog {
+    margin-bottom: 10px;
+}
+
+input[type='file'] {
+    color: rgba(0, 0, 0, 0)
+}
+
+.py-\[8px\] {
+    padding-top: 6px !important;
+}

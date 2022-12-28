@@ -9,7 +9,7 @@ import Journal from "./components/pages/journal/Journal";
 import Contact from "./components/pages/contact/Contact";
 
 import SignIn from "./components/pages/signin/SignIn";
-import SignUp from "./components/pages/signup/SignUp";
+import SignUp from "./components/pages/signup/SignUp";  
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,10 +33,10 @@ import Performance from "adminPages/performance";
 import AdminManagementCourses from "adminPages/managementCourses";
 import AdminManagementAccounts from "adminPages/managementAccounts";
 import AdminManagementRevenue from "adminPages/managementRevenue";
-import AdminManagementBlogs from "adminPages/managementBlogs";
+import AdminManagementBlogs from "adminPages/managementBlogs/viewMyBlogs";
+import AdminAddBlog from "adminPages/managementBlogs/addBlog";
 import AdminManagementProfile from "adminPages/managementProfile";
 import AdminLayout from "adminLayout";
-
 
 function App() {
   return (
@@ -74,6 +74,7 @@ function App() {
             <Route path="/management-accounts" element={<AdminManagementAccounts/>}/>
             <Route path="/management-revenue" element={<AdminManagementRevenue/>}/>
             <Route path="/management-blogs" element={<AdminManagementBlogs/>}/>
+            <Route path="/management-blogs/add-blog" element={<AdminAddBlog/>}/>
             <Route path="/management-profile/edit-profile" element={<AdminManagementProfile/>}/>
           </Route>
         </Routes>

@@ -4,6 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import Header from "../../adminComponents/Header";
 import { useState, useEffect } from 'react';
 import axios  from 'axios';
+import "adminComponents/responsive.css";
 
 
 const URL_API_ACCOUNTS = "http://localhost:5000/api/users/management-accounts";
@@ -89,6 +90,7 @@ const AdminManagementAccounts = () => {
                       color: `${theme.palette.secondary[200]} !important`,
                     },
                   }}
+                  className="datagrid-table-view-accounts"
             >
                 <DataGrid
                     loading={loading || !listAccounts}

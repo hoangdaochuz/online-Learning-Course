@@ -26,6 +26,7 @@ import {
   MenuItem,
   useTheme,
 } from "@mui/material";
+import "./responsive.css";
 
 const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
             borderRadius="9px"
             gap="3rem"
             p="0.1rem 1.5rem"
+            className="header-search"
           >
             <InputBase placeholder="Search..." />
             <IconButton>
@@ -80,7 +82,7 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
               <LightModeOutlined sx={{ fontSize: "25px" }} />
             )}
           </IconButton>
-          <IconButton>
+          <IconButton className="setting-icon-header">
             <SettingsOutlined sx={{ fontSize: "25px" }} />
           </IconButton>
           <FlexBetween>
