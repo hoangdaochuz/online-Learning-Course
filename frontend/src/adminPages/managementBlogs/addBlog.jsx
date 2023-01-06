@@ -72,14 +72,17 @@ const AdminAddBlog = () => {
         formData.append('startDate', startDate)
         formData.append('endDate', endDate)
 
-        const response = await axios.post('http://localhost:5000/api/blogs/add', formData,
-        {
-          headers: {
-            'Content-Type':  "multipart/form-data",
-          }
-        })
-        console.log(response)
-        return response.data
+        if(title && description && image) {
+            const response = await axios.post('http://localhost:5000/api/blogs/add', formData,
+            {
+              headers: {
+                'Content-Type':  "multipart/form-data",
+              }
+            })
+            return response.data
+        } else {
+            return "error"
+        }
     }
 
     return (
@@ -199,10 +202,10 @@ const AdminAddBlog = () => {
               
                             addBlog(data).then((result)=>{
                               if(result.status ==='success'){
-                                toast.success('Add Course Successfully')
+                                toast.success('Add Blog Successfully!')
                                 setTimeout(() => window.location.reload(), 1000)
                               }else{
-                                toast.error('Some thing went wrong')
+                                toast.error('Please fill all fields!')
                               }
                             })
               
