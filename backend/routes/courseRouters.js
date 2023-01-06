@@ -24,8 +24,8 @@ const {
 } = require("../controller/courseController");
 const { upload } = require("../middleware/uploader");
 
-// router.route("/").get(getCourses).post(upload.single('image'),setCourses);
-router.route("/add").post(upload.single('image'),setCourses);
+router.route("/").get(getCourses).post(upload.single('image'),setCourses);
+// router.route("/add").post(upload.single('image'),setCourses);
 router.route("/:id").put(upload.single('image'),updateCourses).delete(deleteCourses).get(getCourseDetail);
 router.route("/mycourse/:idUser").get(getMyCourse);
 router.route("/:id/chapter").get(getChaptersOfCourse).post(addChapterToCourse);
