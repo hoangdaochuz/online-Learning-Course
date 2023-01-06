@@ -275,8 +275,10 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </HomeStyle>;                      
 };
 export default Home;
+
+// End project
