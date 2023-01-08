@@ -18,6 +18,10 @@ export default function ConfirmDialogUpdate(props) {
     const { confirmDialog, setConfirmDialog, id_blog, title, description, image, startDate, endDate } = props;
     const theme = useTheme()
 
+    function isFileImage(file) {
+        return file && file['type'].split('/')[0] === 'image';
+    }
+
     const handleEditBlog = ()=>{
         const data = {title, description, image, startDate, endDate }
         EditBlog(data).then((result)=>{
@@ -39,13 +43,19 @@ export default function ConfirmDialogUpdate(props) {
         formData.append('startDate', startDate)
         formData.append('endDate', endDate)
 
-        const response = await axios.put(`http://localhost:5000/api/blogs/${id_blog}`, formData,
-        {
-          headers: {
-            'Content-Type':  "multipart/form-data",
-          }
-        })
-        return response.data
+        if(image) {
+            if(isFileImage(image)) {
+                const response = await axios.put(`http://localhost:5000/api/blogs/${id_blog}`, formData,
+                {
+                  headers: {
+                    'Content-Type':  "multipart/form-data",
+                  }
+                })
+                return response.data
+            } else {
+                return "error"
+            }
+        }
     }
 
     return (

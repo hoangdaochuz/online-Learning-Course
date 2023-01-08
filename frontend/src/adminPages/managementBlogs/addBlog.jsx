@@ -34,6 +34,10 @@ const AdminAddBlog = () => {
         return [date.getFullYear(), mnth, day].join("-");
     }
 
+    function isFileImage(file) {
+        return file && file['type'].split('/')[0] === 'image';
+    }   
+
     const [image, setImage] = useState(null)
     const [imageFile, setImageFile] = useState(null)
     const styleImage = {
@@ -73,13 +77,17 @@ const AdminAddBlog = () => {
         formData.append('endDate', endDate)
 
         if(title && description && image) {
-            const response = await axios.post('http://localhost:5000/api/blogs/add', formData,
-            {
-              headers: {
-                'Content-Type':  "multipart/form-data",
-              }
-            })
-            return response.data
+            if(isFileImage(image)) {
+                const response = await axios.post('http://localhost:5000/api/blogs/add', formData,
+                {
+                  headers: {
+                    'Content-Type':  "multipart/form-data",
+                  }
+                })
+                return response.data
+            } else {
+                return "error"
+            }
         } else {
             return "error"
         }
