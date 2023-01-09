@@ -44,13 +44,25 @@ export default function ConfirmDialogUpdate(props) {
         formData.append('endDate', endDate)
 
         if(image) {
-            if(isFileImage(image)) {
+            if(isFileImage(image) && title.length > 0 && description.length > 0) {
                 const response = await axios.put(`http://localhost:5000/api/blogs/${id_blog}`, formData,
                 {
                   headers: {
                     'Content-Type':  "multipart/form-data",
                   }
                 })
+                return response.data
+            } else {
+                return "error"
+            }
+        } else {
+            if(title.length > 0 && description.length > 0) {
+                const response = await axios.put(`http://localhost:5000/api/blogs/${id_blog}`, formData,
+                    {
+                      headers: {
+                        'Content-Type':  "multipart/form-data",
+                      }
+                    })
                 return response.data
             } else {
                 return "error"
