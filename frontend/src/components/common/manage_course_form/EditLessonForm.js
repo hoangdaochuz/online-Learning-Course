@@ -144,7 +144,7 @@ const EditLessonForm = ({id_lesson, id_chapter, id_course,closeModal}) => {
                     {/* Tên bài học */}
                     <MyInput label="Tên bài học" type="text" name="name" id="name" placeholder="Nhập tên bài học..." />
 
-                    <MyInputVideo label="Video" type="file" name="video" id="video" oldVideo = {oldLesson.video} getVideo = {handleSelectedVideo}/>
+                    <MyInputVideo label="Video" type="file" accept="video/*" name="video" id="video" oldVideo = {oldLesson.video} getVideo = {handleSelectedVideo}/>
                     <button className="float-right  ml-[20px] bg-[var(--primary-color)] text-white text-base px-[20px] py-[5px] rounded-lg" type="submit">LƯU</button>
                     <button className="float-right border bg-red-600 text-white text-base px-[20px] py-[5px] rounded-lg " onClick={closeModal}>HỦY</button>
                 </div>

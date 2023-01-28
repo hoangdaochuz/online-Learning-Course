@@ -89,6 +89,9 @@ const MyInput = ({ label,change, loading, ...props }) => {
       {loading && (
         <span className="block w-[15px] h-[15px]  border-2 rounded-full border-l-transparent animate-spin ml-[200px] border-blue-600 absolute bottom-[25px] right-[52%]"></span>
       )}
+      {meta.touched && meta.error ? (
+        <div className="text-red-600">{meta.error}</div>
+      ) : null}
     </div>
   );
 };
@@ -173,7 +176,11 @@ const Me = () => {
               job: user.job || "",
             }}
             enableReinitialize
-            validationSchema={Yup.object({})}
+            validationSchema={Yup.object({
+              fullname: Yup.string().required("required"),
+              username: Yup.string().required("Required"),
+              email: Yup.string().required("Required")
+            })}
             onSubmit={(values) => {
               const userChange = {
                 fullname: values.fullname,

@@ -44,7 +44,6 @@ const MyInput = ({ label, ...props }) => {
           {...props}
           {...field}
           className="pl-[15px] py-[8px]"
-
           onChange = {(e)=>{
             field.onChange(e)
             imgFileHandler(e);
@@ -126,7 +125,7 @@ const AddCourseForm = ({userID,closeModal}) => {
                 name: Yup.string().required("Required"),
                 image: Yup.string().required("Required"),
                 description: Yup.string().required("Required"),
-                price: Yup.string().required("Required"),
+                price: Yup.number().required("Required").positive().integer(),
             })}
 
             onSubmit = {(values)=>{
@@ -152,7 +151,7 @@ const AddCourseForm = ({userID,closeModal}) => {
                 <h2 className="text-center text-[var(--primary-color)] text-[28px] border-b-2 border-b-[var(--primary-color)] pb-[20px] ">THÊM KHÓA HỌC</h2>
                 <div className="pb-[70px] mx-10 h-[630px] overflow-y-auto">
                     <MyInput label="Tên khóa học" type="text" name="name" id="name" placeholder="Nhập tên khóa học..." />
-                    <MyInputImage label="Thumnail" type="file" name="image" id="image" getFileImage = {handleGetImageFile}/>
+                    <MyInputImage label="Thumnail" type="file" accept="image/*" name="image" id="image" getFileImage = {handleGetImageFile}/>
                     <MyTextArea label="Mô tả" placeholder="Nhập mô tả khóa học" type="text" name="description" id="description"/>
                     <MyInput label="Giá" placeholder="Nhập giá tiền khóa học" type="text" name="price" id="price"/>
                     <button className="float-right  ml-[20px] bg-[var(--primary-color)] text-white text-base px-[20px] py-[5px] rounded-lg" type="submit">THÊM</button>
