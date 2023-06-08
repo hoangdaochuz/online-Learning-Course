@@ -164,7 +164,7 @@ const ManageTeaching = () => {
 
                   {selectedEditCourse === course.id && isOpenEditModal && <Modal
                                                                             isOpen={isOpenEditModal}
-                            grnguyenhuuu                                                onRequestClose={closeEditModal}
+                                                                            onRequestClose={closeEditModal}
                                                                             shouldCloseOnOverlayClick={true}
                                                                           > 
                                                                             <EditCourseForm id_course = {course.id} closeModal={closeEditModal}/>
